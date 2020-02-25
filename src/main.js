@@ -11,6 +11,10 @@ import 'element-ui/lib/theme-chalk/index.css';
 // 注册 Element-ui
 Vue.use(ElementUI);
 
+// 导入基础样式，import 路径就可以了
+// import '@/style/main.css'
+import './style/base.css';
+
 
 // 导入路由对象，默认先找js文件
 import router from '@/router/index'

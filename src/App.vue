@@ -1,10 +1,6 @@
 <template>
-  <div>
     <!-- 路由的出口 -->
-    <router-view></router-view>
-    <router-link to='#'>点我</router-link>
-    <el-button>我是按钮</el-button>
-  </div>
+    <router-view />
 </template>
 
 <script>
