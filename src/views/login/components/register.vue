@@ -17,7 +17,7 @@
     </el-form-item>  
 
      <el-form-item label="密码" :label-width="formLabelWidth" prop='password'>
-      <el-input v-model="form.password" autocomplete="off"></el-input>
+      <el-input show-password v-model="form.password" autocomplete="off"></el-input>
     </el-form-item>
 
      <el-form-item label="图形码" :label-width="formLabelWidth">
@@ -76,13 +76,16 @@ export default {
               { required:true,messsage:'昵称不能为空',trigger:'blur' }
           ],
           email:[
-              { required:true,messsage:'邮箱不能为空',trigger:'blur' }
+              { required:true,messsage:'邮箱不能为空',trigger:'blur' },
+              { pattern:/\w[-\w.+]*@([A-Za-z0-9][-A-Za-z0-9]+\.)+[A-Za-z]{2,14}/, message:'邮箱格式不正确',trigger:'blur'}
           ],
           phone:[
-              { required:true,messsage:'手机号不能为空',trigger:'blur' }
+              { required:true,messsage:'手机号不能为空',trigger:'blur' },
+              { pattern:/0?(13|14|15|18|17)[0-9]{9}/,message:'手机号格式错误',trigger:'blur' }
           ],
           password:[
-              { required:true,messsage:'密码不能为空',trigger:'blur' }
+              { required:true,messsage:'密码不能为空',trigger:'blur' },
+              { min:5,max:14,message:'长度在5-14之间',trigger:'change' }
           ],
       }
     };
