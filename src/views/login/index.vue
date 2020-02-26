@@ -111,7 +111,6 @@ export default {
     },
     // 注册的点击事件
     showReg(){
-      console.log('123');
       this.$refs.reg.dialogFormVisible = true;
     }
   }
