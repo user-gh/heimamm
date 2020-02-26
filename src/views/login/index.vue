@@ -32,7 +32,7 @@
             </el-col>
             <!-- 第二列 ，放的是验证码图片 -->
             <el-col :span="7">
-              <img class="code" src alt />
+              <img class="code" src="./images/code.png" alt />
             </el-col>
           </el-row>
         </el-form-item>
@@ -47,14 +47,14 @@
 
         <el-form-item>
           <el-button class="box-btn" type="primary" @click="doLogin">登录</el-button>
-          <el-button class="box-btn" type="primary">注册</el-button>
+          <el-button class="box-btn" type="primary" @click='showReg'>注册</el-button>
         </el-form-item>
       </el-form>
     </div>
     <!-- 左侧图片 -->
     <img src="./images/login_banner_ele.png" alt />
     <!-- 注册对话框 -->
-    <reg></reg>
+    <reg ref="reg"></reg>
   </div>
 </template>
 
@@ -108,6 +108,11 @@ export default {
           alert("全部通过");
         }
       });
+    },
+    // 注册的点击事件
+    showReg(){
+      console.log('123');
+      this.$refs.reg.dialogFormVisible = true;
     }
   }
 };
