@@ -52,8 +52,8 @@
 </template>
 
 <script>
-// 导包
-import axios from 'axios'
+// 导入 register
+import { sendSMS } from '@/api/register.js' 
 
 export default {
   name: "register",
@@ -113,6 +113,14 @@ export default {
     },
     //   获取用户验证码点击事件
     getPhoneCode() {
+    // 判断手机是否合法
+    if(!(/0?(13|14|15|18|17)[0-9]{9}/.test(this.form.phone))){
+         return this.$message.error('手机号码格式不正确');
+    }
+    // 判断验证码是否合法
+    if(this.form.imgCode.length != 4){
+        return this.$message.error('验证码格式不正确');
+    }
       this.sec = 60;
       //写一个每隔1秒触发的计时器
       let timer = setInterval(() => {
@@ -124,22 +132,18 @@ export default {
       }, 1000);
     // 发请求获取手机验证码
     // axios如果发跨域请求，默认不会携带cookie
-    axios({
-        url: process.env.VUE_APP_URL + '/sendsms',
-        method:'post',
-        data: { 
-            code:this.form.imgCode,
-            phone:this.form.phone
-        },
-        // 允许携带cookie
-        withCredentials:true
-    }).then(res=>{
+    // 导入一个给接口对象就可以了
+   sendSMS({
+       code:this.form.imgCode,
+       phone:this.form.phone 
+   })
+   .then(res=>{
         //成功回调
-        if(res.data.data == 200){
+        if(res.data.code == 200){
             // 获取验证码成功
             this.$message.success('获取验证码成功,验证码为'+ res.data.data.captcha);
         }else{
-            this.$message.warining(res.data.message);
+            this.$message.error(res.data.message);
         }
     });
     } 
