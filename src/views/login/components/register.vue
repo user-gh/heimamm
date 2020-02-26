@@ -135,12 +135,11 @@ export default {
         withCredentials:true
     }).then(res=>{
         //成功回调
-        console.log(res);
         if(res.data.data == 200){
             // 获取验证码成功
-            alert('获取验证码成功,验证码为'+ res.data.data.captcha);
+            this.$message.success('获取验证码成功,验证码为'+ res.data.data.captcha);
         }else{
-            alert(res.data.message);
+            this.$message.warining(res.data.message);
         }
     });
     } 
