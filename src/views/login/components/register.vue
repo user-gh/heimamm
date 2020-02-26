@@ -1,7 +1,31 @@
 <template>
   <!-- 注册对话框 -->
   <el-dialog title="用户注册" width="603px" center :visible.sync="dialogFormVisible">
+    <!-- 注册表单 -->
     <el-form :model="form" :rules="rules">
+      <el-form-item label="头像" :label-width="formLabelWidth">
+        <!-- 用户头像上传 -->
+        <!-- 
+        action:上传图片的接口地址
+        show-file-list:上传后是否要显示上传文件列表,给false代表不显示
+        on-success：上传成功调用的回调函数
+        before-upload：上传之前调用的函数
+        -->
+        <el-upload
+          name='image'
+          class="avatar-uploader"
+          :action="uploadUrl"
+          :show-file-list="false"
+          :on-success="handleAvatarSuccess"
+          :before-upload="beforeAvatarUpload"
+        >
+          <!-- 是为了显示上传成功后的图片 -->
+          <img v-if="imageUrl" :src="imageUrl" class="avatar" />
+          <!-- 我们看到的 + 号 -->
+          <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+        </el-upload>
+      </el-form-item> 
+
       <el-form-item label="昵称" :label-width="formLabelWidth" prop="name">
         <el-input v-model="form.name" autocomplete="off"></el-input>
       </el-form-item>
@@ -53,12 +77,16 @@
 
 <script>
 // 导入 register
-import { sendSMS } from '@/api/register.js' 
+import { sendSMS } from "@/api/register.js";
 
 export default {
   name: "register",
   data() {
     return {
+      // 要上传图片的接口地址
+      uploadUrl: process.env.VUE_APP_URL + "/uploads",
+      //  上传后的图片路径
+      imageUrl: "",
       // 倒计时的秒数
       sec: 0,
       // 图形验证码接口地址
@@ -73,7 +101,7 @@ export default {
         email: "",
         phone: "",
         password: "",
-        imgCode:''
+        imgCode: ""
       },
       // 规则对象
       rules: {
@@ -113,14 +141,14 @@ export default {
     },
     //   获取用户验证码点击事件
     getPhoneCode() {
-    // 判断手机是否合法
-    if(!(/0?(13|14|15|18|17)[0-9]{9}/.test(this.form.phone))){
-         return this.$message.error('手机号码格式不正确');
-    }
-    // 判断验证码是否合法
-    if(this.form.imgCode.length != 4){
-        return this.$message.error('验证码格式不正确');
-    }
+      // 判断手机是否合法
+      if (!/0?(13|14|15|18|17)[0-9]{9}/.test(this.form.phone)) {
+        return this.$message.error("手机号码格式不正确");
+      }
+      // 判断验证码是否合法
+      if (this.form.imgCode.length != 4) {
+        return this.$message.error("验证码格式不正确");
+      }
       this.sec = 60;
       //写一个每隔1秒触发的计时器
       let timer = setInterval(() => {
@@ -130,23 +158,44 @@ export default {
           clearInterval(timer);
         }
       }, 1000);
-    // 发请求获取手机验证码
-    // axios如果发跨域请求，默认不会携带cookie
-    // 导入一个给接口对象就可以了
-   sendSMS({
-       code:this.form.imgCode,
-       phone:this.form.phone 
-   })
-   .then(res=>{
+      // 发请求获取手机验证码
+      // axios如果发跨域请求，默认不会携带cookie
+      // 导入一个给接口对象就可以了
+      sendSMS({
+        code: this.form.imgCode,
+        phone: this.form.phone
+      }).then(res => {
         //成功回调
-        if(res.data.code == 200){
-            // 获取验证码成功
-            this.$message.success('获取验证码成功,验证码为'+ res.data.data.captcha);
-        }else{
-            this.$message.error(res.data.message);
+        if (res.data.code == 200) {
+          // 获取验证码成功
+          this.$message.success(
+            "获取验证码成功,验证码为" + res.data.data.captcha
+          );
+        } else {
+          this.$message.error(res.data.message);
         }
-    });
-    } 
+      });
+    },
+    // 图片上传成功调用的回调函数
+    handleAvatarSuccess(res, file) {
+      //  把图片转换成临时路径
+      this.imageUrl = URL.createObjectURL(file.raw);
+    },
+    // 图片上传之前调用的回调函数
+    beforeAvatarUpload(file) {
+      // 判断文件的类型
+      const isJPG = file.type === "image/jpeg";
+      // 判断文件的大小
+      const isLt2M = file.size / 1024 / 1024 < 2;
+
+      if (!isJPG) {
+        this.$message.error("上传头像图片只能是 JPG 格式!");
+      }
+      if (!isLt2M) {
+        this.$message.error("上传头像图片大小不能超过 2MB!");
+      }
+      return isJPG && isLt2M;
+    }
   }
 };
 </script>
@@ -166,5 +215,30 @@ export default {
   width: 100%;
   height: 41px;
   vertical-align: top;
+}
+
+.avatar-uploader{
+    text-align: center;
+}
+.avatar-uploader .el-upload {
+  border: 1px dashed #d9d9d9;
+  border-radius: 6px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+.avatar-uploader .el-upload:hover {
+  border-color: #409eff;
+}
+.avatar-uploader-icon {
+  font-size: 28px;
+  color: #8c939d;
+  width: 178px;
+  height: 178px;
+  line-height: 178px;
+  text-align: center;
+}
+.el-upload {
+  text-align: center;
 }
 </style>
