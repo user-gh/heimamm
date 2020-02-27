@@ -1,13 +1,13 @@
 <template>
   <el-container class="my-container">
     <el-header class="my-header">
-      <!-- 左边的部分  -->
+      <!-- 头部左边的部分  -->
       <div class="left">
         <i class="el-icon-s-fold"></i>
         <img src="./images/logo.png" alt />
         <span>黑马面面</span>
       </div>
-      <!-- 右边的部分 -->
+      <!-- 头部右边的部分 -->
       <div class="right">
         <img :src="avater" alt />
         <span class="name">{{username}}, 你好</span>
@@ -15,7 +15,38 @@
       </div>
     </el-header>
     <el-container>
-      <el-aside class="my-aside" width="200px">Aside</el-aside>
+        <!-- 左侧导航菜单部分 -->
+      <el-aside class="my-aside" width="200px">
+        <el-menu default-active="1" class="el-menu-vertical-demo">
+    
+          <el-menu-item index="1">
+            <i class="el-icon-pie-chart"></i>
+            <span slot="title">数据概览</span>
+          </el-menu-item>
+    
+          <el-menu-item index="2">
+            <i class="el-icon-user"></i>
+            <span slot="title">用户列表</span>
+          </el-menu-item>
+    
+          <el-menu-item index="3">
+            <i class="el-icon-edit-outline"></i>
+            <span slot="title">题库列表</span>
+          </el-menu-item>
+    
+          <el-menu-item index="4">
+            <i class="el-icon-office-building"></i>
+            <span slot="title">企业列表</span>
+          </el-menu-item>
+    
+          <el-menu-item index="5">
+            <i class="el-icon-notebook-2"></i>
+            <span slot="title">学科列表</span>
+          </el-menu-item>
+          
+        
+        </el-menu>
+      </el-aside>
       <el-main class="my-main">Main</el-main>
     </el-container>
   </el-container>
@@ -23,8 +54,8 @@
 
 <script>
 // 导入接口
-import { info,logout } from "@/api/index.js";
-import { romoveToken } from '@/utilis/token.js'
+import { info, logout } from "@/api/index.js";
+import { romoveToken } from "@/utilis/token.js";
 export default {
   name: "index",
   data() {
@@ -43,17 +74,14 @@ export default {
         type: "warning"
       })
         .then(() => {
-            // 发请求(调用退出接口的方法)
-            logout().then(res =>{
-                // console.log(res);
-                if(res.data.code == 200){
-                    this.$message.success('退出成功');
-                    // 调用删除token的接口方法
-                    romoveToken();
-                    // 跳回登录页面
-                    this.$router.push('/login');
-                }
-            })      
+          // 发请求(调用退出接口的方法)
+          logout().then(() => {
+            this.$message.success("退出成功");
+            // 调用删除token的接口方法
+            romoveToken();
+            // 跳回登录页面
+            this.$router.push("/login");
+          });
         })
         .catch(() => {
           this.$message({
@@ -67,7 +95,7 @@ export default {
   created() {
     // 调用 获取当前的用户信息的接口方法
     info().then(res => {
-        console.log(res);
+      console.log(res);
       this.username = res.data.data.username;
       // 记得在前面拼接基地址
       this.avater = process.env.VUE_APP_URL + "/" + res.data.data.avatar;
@@ -128,9 +156,9 @@ export default {
       margin-right: 38px;
     }
   }
-  .my-aside {
-    background-color: yellowgreen;
-  }
+//   .my-aside {
+//     background-color: yellowgreen;
+//   }
 
   .my-main {
     background-color: #0094ff;
