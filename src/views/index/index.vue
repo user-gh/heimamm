@@ -4,7 +4,7 @@
       <!-- 头部左边的部分  -->
       <div class="left">
         <!-- 字体图标 -->
-        <i @click="isCollapse = !isCollapse" class="el-icon-s-fold"></i>
+        <i @click="isCollapse = !isCollapse" :class="isCollapse ? 'el-icon-s-unfold' : 'el-icon-s-fold'"></i>
         <img src="./images/logo.png" alt />
         <span>黑马面面</span>
       </div>
@@ -45,7 +45,10 @@
           </el-menu-item>
         </el-menu>
       </el-aside>
-      <el-main class="my-main">Main</el-main>
+      <el-main class="my-main">
+          <!-- 子路由的路由出口 -->
+          <router-view></router-view>
+      </el-main>
     </el-container>
   </el-container>
 </template>
