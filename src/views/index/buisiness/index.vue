@@ -1,5 +1,5 @@
 <template>
-  <h3>我是user.vue</h3>
+  <h3>我是buisiness.vue</h3>
 </template>
 
 <script>
@@ -9,7 +9,7 @@ export default {
         return {
             
         }
-    },  
+    },
 }
 </script>
 
