@@ -61,8 +61,9 @@
 <script>
 // 1.导入组件
 import reg from "./components/register.vue";
-//  导入 登录接口封装的方法文件
 import { login } from "@/api/login.js";
+import { setToken } from '@/utilis/token.js';
+
 // 3.在需要的地方写这个组件的标签
 export default {
   // 2.注册组件
@@ -120,7 +121,8 @@ export default {
               // 登录成功提示信息
               this.$message.success('登录成功');
               // 把token存起来
-              window.localStorage.setItem('token',res.data.data.token);
+              // window.localStorage.setItem('token',res.data.data.token);
+              setToken(res.data.data.token);
               // 跳转到首页
               this.$router.push('/index');
             }else{
