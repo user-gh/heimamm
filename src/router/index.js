@@ -8,12 +8,18 @@ import VueRouter from 'vue-router'
 Vue.use(VueRouter)
 
 // 准备组件
-import login from '../views/login/index'
+import login from '@/views/login/index';
+import index from '@/views/index/index';
 // 设置路由规则
-const routes = [{
-    path:'/login',
-    component:login 
-}]
+const routes = [
+  {
+    path: '/login',
+    component: login
+  }, 
+  {
+    path: '/index',
+    component: index
+  },]
 
 // 创建路由对象
 const router = new VueRouter({
