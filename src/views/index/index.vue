@@ -9,9 +9,9 @@
       </div>
       <!-- 右边的部分 -->
       <div class="right">
-       <img :src="avater" alt />
+        <img :src="avater" alt />
         <span class="name">{{username}}, 你好</span>
-        <el-button type='primary' size='small'>退出</el-button>
+        <el-button @click="doLogout" type="primary" size="small">退出</el-button>
       </div>
     </el-header>
     <el-container>
@@ -23,26 +23,56 @@
 
 <script>
 // 导入接口
-import { info } from '@/api/index.js';
-
+import { info,logout } from "@/api/index.js";
+import { romoveToken } from '@/utilis/token.js'
 export default {
   name: "index",
   data() {
     return {
-        username:'',
-        avater: ''
+      username: "",
+      avater: ""
     };
   },
-  // 创建之后的钩子函数 
+  // 方法集合
+  methods: {
+    //  用户退出按钮的事件
+    doLogout() {
+      this.$confirm("您将退出本系统,是否继续?", "是否退出", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(() => {
+            // 发请求(调用退出接口的方法)
+            logout().then(res =>{
+                // console.log(res);
+                if(res.data.code == 200){
+                    this.$message.success('退出成功');
+                    // 调用删除token的接口方法
+                    romoveToken();
+                    // 跳回登录页面
+                    this.$router.push('/login');
+                }
+            })      
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "感谢您留下来陪着我,我好开心"
+          });
+        });
+    }
+  },
+  // 创建之后的钩子函数
   created() {
     // 调用 获取当前的用户信息的接口方法
-      info().then(res => {
-        //   console.log(res);
-        this.username = res.data.data.username;
-        // 记得在前面拼接基地址
-        this.avater = process.env.VUE_APP_URL + '/' + res.data.data.avatar;
-      })
-  },
+    info().then(res => {
+        console.log(res);
+      this.username = res.data.data.username;
+      // 记得在前面拼接基地址
+      this.avater = process.env.VUE_APP_URL + "/" + res.data.data.avatar;
+    });
+  }
 };
 </script>
 
@@ -82,23 +112,21 @@ export default {
     }
   }
 
-  .right{
-      height: 100%;
-      display: flex;
-      align-items: center;
+  .right {
+    height: 100%;
+    display: flex;
+    align-items: center;
 
-      img{
-          width: 43px;
-          height: 43px;
-          margin-right: 9px;
-      }
+    img {
+      width: 43px;
+      height: 43px;
+      margin-right: 9px;
+    }
 
-      span.name{
-          font-size: 14px;
-          margin-right: 38px;
-      }
-
-       
+    span.name {
+      font-size: 14px;
+      margin-right: 38px;
+    }
   }
   .my-aside {
     background-color: yellowgreen;
