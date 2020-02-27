@@ -9,8 +9,8 @@
       </div>
       <!-- 右边的部分 -->
       <div class="right">
-        <img src="./images/logo.png" alt />
-        <span class="name">姗姗你好</span>
+       <img :src="avater" alt />
+        <span class="name">{{username}}, 你好</span>
         <el-button type='primary' size='small'>退出</el-button>
       </div>
     </el-header>
@@ -22,11 +22,27 @@
 </template>
 
 <script>
+// 导入接口
+import { info } from '@/api/index.js';
+
 export default {
   name: "index",
   data() {
-    return {};
-  }
+    return {
+        username:'',
+        avater: ''
+    };
+  },
+  // 创建之后的钩子函数 
+  created() {
+    // 调用 获取当前的用户信息的接口方法
+      info().then(res => {
+        //   console.log(res);
+        this.username = res.data.data.username;
+        // 记得在前面拼接基地址
+        this.avater = process.env.VUE_APP_URL + '/' + res.data.data.avatar;
+      })
+  },
 };
 </script>
 
