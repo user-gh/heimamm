@@ -3,7 +3,8 @@
     <el-header class="my-header">
       <!-- 头部左边的部分  -->
       <div class="left">
-        <i class="el-icon-s-fold"></i>
+        <!-- 字体图标 -->
+        <i @click="isCollapse = !isCollapse" class="el-icon-s-fold"></i>
         <img src="./images/logo.png" alt />
         <span>黑马面面</span>
       </div>
@@ -15,36 +16,33 @@
       </div>
     </el-header>
     <el-container>
-        <!-- 左侧导航菜单部分 -->
-      <el-aside class="my-aside" width="200px">
-        <el-menu default-active="1" class="el-menu-vertical-demo">
-    
+      <!-- 左侧导航菜单部分 -->
+      <el-aside class="my-aside" width="auto">
+        <el-menu :collapse="isCollapse" default-active="1" class="el-menu-vertical-demo">
           <el-menu-item index="1">
             <i class="el-icon-pie-chart"></i>
             <span slot="title">数据概览</span>
           </el-menu-item>
-    
+
           <el-menu-item index="2">
             <i class="el-icon-user"></i>
             <span slot="title">用户列表</span>
           </el-menu-item>
-    
+
           <el-menu-item index="3">
             <i class="el-icon-edit-outline"></i>
             <span slot="title">题库列表</span>
           </el-menu-item>
-    
+
           <el-menu-item index="4">
             <i class="el-icon-office-building"></i>
             <span slot="title">企业列表</span>
           </el-menu-item>
-    
+
           <el-menu-item index="5">
             <i class="el-icon-notebook-2"></i>
             <span slot="title">学科列表</span>
           </el-menu-item>
-          
-        
         </el-menu>
       </el-aside>
       <el-main class="my-main">Main</el-main>
@@ -61,7 +59,9 @@ export default {
   data() {
     return {
       username: "",
-      avater: ""
+      avater: "",
+      // 是否折叠菜单
+      isCollapse: false
     };
   },
   // 方法集合
@@ -156,12 +156,17 @@ export default {
       margin-right: 38px;
     }
   }
-//   .my-aside {
-//     background-color: yellowgreen;
-//   }
+  //   .my-aside {
+  //     background-color: yellowgreen;
+  //   }
 
   .my-main {
     background-color: #0094ff;
   }
+}
+// 导航菜单的动画效果
+.el-menu-vertical-demo:not(.el-menu--collapse) {
+  width: 200px;
+  min-height: 400px;
 }
 </style>
