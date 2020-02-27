@@ -32,7 +32,7 @@
             </el-col>
             <!-- 第二列 ，放的是验证码图片 -->
             <el-col :span="7">
-              <img class="code" src="./images/code.png" alt />
+              <img class="code" :src="imgUrl" @click="changeImgCode" alt />
             </el-col>
           </el-row>
         </el-form-item>
@@ -61,7 +61,8 @@
 <script>
 // 1.导入组件
 import reg from "./components/register.vue";
-
+//  导入 登录接口封装的方法文件
+import { login } from "@/api/login.js";
 // 3.在需要的地方写这个组件的标签
 export default {
   // 2.注册组件
@@ -71,6 +72,9 @@ export default {
   name: "index",
   data() {
     return {
+      // 图片地址
+      imgUrl:process.env.VUE_APP_URL + '/captcha?type=login',
+
       // 跟表单双向绑定的数据
       form: {
         phone: "",
@@ -105,13 +109,34 @@ export default {
       // 找到表单对象，调用validate方法
       this.$refs.loginForm.validate(v => {
         if (v) {
-          this.$message.success("全部通过");
+          // 调用登录接口的方法
+          login({
+            phone:this.form.phone,
+            password:this.form.password,
+            code:this.form.code
+          }).then(res => {
+            // window.console.log(res);
+            if(res.data.code == 200){
+              // 登录成功提示信息
+              this.$message.success('登录成功');
+              // 把token存起来
+              window.localStorage.setItem('token',res.data.data.token);
+              // 跳转到首页
+              this.$router.push('/index');
+            }else{
+              this.$message.error(res.data.message);
+            }
+          })
         }
       });
     },
     // 注册的点击事件
     showReg(){
       this.$refs.reg.dialogFormVisible = true;
+    },
+    // 图片验证码点击事件
+    changeImgCode(){
+      this.imgUrl = process.env.VUE_APP_URL + '/captcha?type=login&sb'+ Date.now();
     }
   }
 };
