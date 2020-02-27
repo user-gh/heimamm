@@ -2,8 +2,8 @@
   <!-- 注册对话框 -->
   <el-dialog title="用户注册" width="603px" center :visible.sync="dialogFormVisible">
     <!-- 注册表单 -->
-    <el-form  ref="regForm" :model="form" :rules="rules">
-      <el-form-item label="头像" :label-width="formLabelWidth" prop ="avatar">
+    <el-form ref="regForm" :model="form" :rules="rules">
+      <el-form-item label="头像" :label-width="formLabelWidth" prop="avatar">
         <!-- 用户头像上传 -->
         <!-- 
         action:上传图片的接口地址
@@ -13,7 +13,7 @@
         -->
         <el-upload
           v-model="form.avatar"
-          name='image'
+          name="image"
           class="avatar-uploader"
           :action="uploadUrl"
           :show-file-list="false"
@@ -25,7 +25,7 @@
           <!-- 我们看到的 + 号 -->
           <i v-else class="el-icon-plus avatar-uploader-icon"></i>
         </el-upload>
-      </el-form-item> 
+      </el-form-item>
 
       <el-form-item label="昵称" :label-width="formLabelWidth" prop="name">
         <el-input v-model="form.name" autocomplete="off"></el-input>
@@ -43,7 +43,7 @@
         <el-input show-password v-model="form.password" autocomplete="off"></el-input>
       </el-form-item>
 
-      <el-form-item label="图形码" :label-width="formLabelWidth" prop='imgCode'>
+      <el-form-item label="图形码" :label-width="formLabelWidth" prop="imgCode">
         <el-row>
           <el-col :span="16">
             <el-input v-model="form.imgCode" autocomplete="off"></el-input>
@@ -54,7 +54,7 @@
         </el-row>
       </el-form-item>
 
-      <el-form-item label="验证码" :label-width="formLabelWidth" prop='rcode'>
+      <el-form-item label="验证码" :label-width="formLabelWidth" prop="rcode">
         <el-row>
           <el-col :span="16">
             <el-input v-model="form.rcode" autocomplete="off"></el-input>
@@ -78,7 +78,7 @@
 
 <script>
 // 导入 register
-import { sendSMS,register } from "@/api/register.js";
+import { sendSMS, register } from "@/api/register.js";
 
 export default {
   name: "register",
@@ -99,11 +99,11 @@ export default {
       // 跟表单元素双向绑定的对象
       form: {
         //   头像
-        avatar:'',
+        avatar: "",
         // 用户名
         name: "",
         // 邮箱
-        email: "", 
+        email: "",
         // 手机号
         phone: "",
         // 密码
@@ -111,30 +111,28 @@ export default {
         // 图形验证码
         imgCode: "",
         // 手机验证码
-        rcode:''
+        rcode: ""
       },
       // 规则对象
       rules: {
-        avatar:[
-            { required:true,message:'头像不能为空',trigger:'change' }
+        avatar: [
+          { required: true, message: "头像不能为空", trigger: "change" }
         ],
         // 图片验证码
-        imgCode:[
-            { required:true,message:'图片验证码不能为空',trigger:'blur' },
-            // { min:4,max:4,message:'图片验证码只能是4位',trigger:'blur' }
-            { len:4,message:'图片验证码只能是4位',trigger:'blur' }
+        imgCode: [
+          { required: true, message: "图片验证码不能为空", trigger: "blur" },
+          // { min:4,max:4,message:'图片验证码只能是4位',trigger:'blur' }
+          { len: 4, message: "图片验证码只能是4位", trigger: "blur" }
         ],
         // 手机验证码
-        rcode:[
-            { required:true,message:'手机号验证码不能为空',trigger:'blur' },
-            // { min:4,max:4,message:'手机号验证码只能为4位',trigger:'blur' }
-            { len:4,message:'手机号验证码只能为4位',trigger:'blur' }
-        ], 
-        name: [
-            { required: true, messsage: "昵称不能为空", trigger: "blur" }
-            ],
+        rcode: [
+          { required: true, message: "手机号验证码不能为空", trigger: "blur" },
+          // { min:4,max:4,message:'手机号验证码只能为4位',trigger:'blur' }
+          { len: 4, message: "手机号验证码只能为4位", trigger: "blur" }
+        ],
+        name: [{ required: true, message: "昵称不能为空", trigger: "blur" }],
         email: [
-          { required: true, messsage: "邮箱不能为空", trigger: "blur" },
+          { required: true, message: "邮箱不能为空", trigger: "blur" },
           {
             pattern: /\w[-\w.+]*@([A-Za-z0-9][-A-Za-z0-9]+\.)+[A-Za-z]{2,14}/,
             message: "邮箱格式不正确",
@@ -142,7 +140,7 @@ export default {
           }
         ],
         phone: [
-          { required: true, messsage: "手机号不能为空", trigger: "blur" },
+          { required: true, message: "手机号不能为空", trigger: "blur" },
           {
             pattern: /0?(13|14|15|18|17)[0-9]{9}/,
             message: "手机号格式错误",
@@ -150,7 +148,7 @@ export default {
           }
         ],
         password: [
-          { required: true, messsage: "密码不能为空", trigger: "blur" },
+          { required: true, message: "密码不能为空", trigger: "blur" },
           { min: 5, max: 14, message: "长度在5-14之间", trigger: "change" }
         ]
       }
@@ -158,31 +156,35 @@ export default {
   },
   methods: {
     //  确定按钮点击事件
-      doRegister(){
-        //   要找到表单对象(首先给表单加ref属性 )
-        this.$refs.regForm.validate(v=>{
-            if(v){
-                // 调用注册按钮发送axios请求的方法
-                register({
-                    username:this.form.name,
-                    phone:this.form.phone,
-                    email:this.form.email,
-                    avatar:this.form.avatar,
-                    password:this.form.password,
-                    rcode:this.form.rcode
-                })
-                .then(res =>{
-                    // console.log(res);
-                    if(res.data.code == 200){
-                        // 注册成功，关闭对话框
-                        this.dialogFormVisible = false;
-                    }else{
-                        this.$message.error(res.data.message);
-                    }
-                })
+    doRegister() {
+      //   要找到表单对象(首先给表单加ref属性 )
+      this.$refs.regForm.validate(v => {
+        if (v) {
+          // 调用注册按钮发送axios请求的方法
+          register({
+            username: this.form.name,
+            phone: this.form.phone,
+            email: this.form.email,
+            avatar: this.form.avatar,
+            password: this.form.password,
+            rcode: this.form.imgCode
+          }).then(res => {
+            // console.log(res);
+            if (res.data.code == 200) {
+                this.$message.success('注册成功');
+                // 重置表单,它只重置表单元素
+                // 而img不是表单元素，所以只要img绑定的url还在，它就一直显示
+                this.$refs.regForm.resetFields();
+                this.imageUrl = '';
+              // 注册成功，关闭对话框
+              this.dialogFormVisible = false;
+            } else {
+              this.$message.error(res.data.message);
             }
-        });
-      },
+          });
+        }
+      });
+    },
     //   图片验证码点击事件
     getNewCode() {
       //   浏览器缓存机制
@@ -190,7 +192,7 @@ export default {
       //   1.随机数 (Math.random())
       //   2.时间戳 (Date.now())
       this.picCodeUrl =
-        process.env.VUE_APP_URL + "/captcha?type=sendsms" + Date.now();
+        process.env.VUE_APP_URL + "/captcha?type=sendsms&sb" + Date.now();
     },
     //   获取用户验证码点击事件
     getPhoneCode() {
@@ -238,7 +240,7 @@ export default {
       //  上传成功后还要给avatar赋值
       this.form.avatar = res.data.file_path;
       // 这个时候我们想办法单独对这个属性做一次校验
-      this.$refs.regForm.validateField('avatar');   
+      this.$refs.regForm.validateField("avatar");   
     },
     // 图片上传之前调用的回调函数
     beforeAvatarUpload(file) {
@@ -249,7 +251,7 @@ export default {
 
       if (!isJPG) {
         this.$message.error("上传头像文件只能是图片格式!");
-      }  
+      }
       if (!isLt2M) {
         this.$message.error("上传头像图片大小不能超过 2MB!");
       }
@@ -276,8 +278,8 @@ export default {
   vertical-align: top;
 }
 
-.avatar-uploader{
-    text-align: center;
+.avatar-uploader {
+  text-align: center;
 }
 .avatar-uploader .el-upload {
   border: 1px dashed #d9d9d9;
@@ -297,6 +299,13 @@ export default {
   line-height: 178px;
   text-align: center;
 }
+
+.avatar {
+  width: 178px;
+  height: 178px;
+  display: block;
+}
+
 .el-upload {
   text-align: center;
 }
