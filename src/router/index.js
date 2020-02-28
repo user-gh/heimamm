@@ -65,6 +65,9 @@ const router = new VueRouter({
   routes
 })
 
+// 定义一个白名单数组
+let whiteUrl = [ '/login' ]
+
 // 导航守卫写在router对象的后面
 // 即将跳转路由之前调用
 // to: 到哪去
@@ -73,8 +76,8 @@ const router = new VueRouter({
 router.beforeEach((to, from, next) => {
   // 开启进度条
   NProgress.start();
-  // 如果是登录页直接放行
-  if (to.path == '/login') {
+  // 如果路由白名单包含某路径,直接放行 
+  if (whiteUrl.includes(to.path)) {
     next();
   } else {
     // 判断token真假
