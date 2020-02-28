@@ -85,9 +85,11 @@ router.beforeEach((to, from, next) => {
       }else{
         // 弹出提示(在路由里this不是vue实例,所以没有this.$message)
         // this.$message.error('登录状态异常,请重新登录');
-        Message.error('登录状态异常,请重新登录!');
+        Message.error('登录状态异常,请重新登录');
         // 删除本地token
         removeToken();
+        // 手动把进度条完成
+        NProgress.done();
         // 放行到登录页
         next('/login');
       }
