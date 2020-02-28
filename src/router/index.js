@@ -14,7 +14,8 @@ import { Message } from 'element-ui';
 
 //导入路由
 import VueRouter from 'vue-router'
-
+// 导入store
+import store from '@/store/index'
 // 注册路由
 Vue.use(VueRouter)
 
@@ -109,18 +110,22 @@ router.beforeEach((to, from, next) => {
     // 判断token真假
     info().then(res => {
       if(res.data.code == 200){
+        // 把返回的名字存到vuex的数据仓库中
+        store.commit('changeUsername',res.data.data.username);
+         // 把返回的头像存到vuex的数据仓库中
+        store.commit('changeAvatar',process.env.VUE_APP_URL + '/' + res.data.data.avatar);
         // 如果是真的，直接 放行
         next()
       }else{
         // 弹出提示(在路由里this不是vue实例,所以没有this.$message)
-        // this.$message.error('登录状态异常,请重新登录');
+        // this.$message.error('登录状态异常,请 重新登录');
         Message.error('登录状态异常,请重新登录');
         // 删除本地token
         removeToken();
         // 手动把进度条完成
         NProgress.done();
         // 放行到登录页
-        next('/login');
+        next('/login'); 
       }
     })
   }

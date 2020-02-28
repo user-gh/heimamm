@@ -10,11 +10,11 @@
         ></i>
         <img src="./images/logo.png" alt />
         <span>黑马面面</span>
-      </div>
+      </div>  
       <!-- 头部右边的部分 -->
       <div class="right">
-        <img :src="avater" alt />
-        <span class="name">{{username}}, 你好</span>
+        <img :src="$store.state.avatar" alt />
+        <span class="name">{{ $store.state.username }}, 你好</span>
         <el-button @click="doLogout" type="primary" size="small">退出</el-button>
       </div>
     </el-header>
@@ -61,8 +61,8 @@
 
 <script>
 // 导入接口
-import { info, logout } from "@/api/index.js";
-import { romoveToken, getToken } from "@/utilis/token.js";
+import { logout } from "@/api/index.js";
+import { removeToken, getToken } from "@/utilis/token.js";
 export default {
   name: "index",
   data() {
@@ -87,7 +87,7 @@ export default {
           logout().then(() => {
             this.$message.success("退出成功");
             // 调用删除token的接口方法
-            romoveToken();
+            removeToken();
             // 跳回登录页面
             this.$router.push("/login");
           });
@@ -110,26 +110,6 @@ export default {
       this.$router.push("/login");
     }
   },
-  // 创建之后的钩子函数
-  created() {
-    // 调用 获取当前的用户信息的接口方法
-    // ajax是异步请求,要等同步任务执行完毕才执行
-    info().then(res => {
-      if (res.data.code == 200) {
-        this.username = res.data.data.username;
-        // 记得在前面拼接基地址
-        this.avater = process.env.VUE_APP_URL + "/" + res.data.data.avatar;
-        // 如果token错误(伪造或过期)
-      } else if (res.data.code == 206) {
-        // 给个提示
-        this.$message.error("登录状态异常,请重新登录");
-        // 删除本地token
-        removeToken();
-        // 跳回登录页面
-        this.$router.push("/login");  
-      }
-    });
-  }
 };
 </script>
 
