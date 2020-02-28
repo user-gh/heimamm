@@ -12,6 +12,6 @@ export function setToken(token){
 }
 
 // 删除token
-export function romoveToken(){
+export function removeToken(){
     window.localStorage.removeItem(TOKENKEY);
 }

@@ -4,7 +4,10 @@
       <!-- 头部左边的部分  -->
       <div class="left">
         <!-- 字体图标 -->
-        <i @click="isCollapse = !isCollapse" :class="isCollapse ? 'el-icon-s-unfold' : 'el-icon-s-fold'"></i>
+        <i
+          @click="isCollapse = !isCollapse"
+          :class="isCollapse ? 'el-icon-s-unfold' : 'el-icon-s-fold'"
+        ></i>
         <img src="./images/logo.png" alt />
         <span>黑马面面</span>
       </div>
@@ -18,9 +21,9 @@
     <el-container>
       <!-- 左侧导航菜单部分 -->
       <el-aside class="my-aside" width="auto">
-          <!-- router 为 true 启用路由模式，false为不启用 
+        <!-- router 为 true 启用路由模式，false为不启用 
                 以被点击的菜单的index属性作为路径跳转
-          -->
+        -->
         <el-menu router :collapse="isCollapse" default-active="1" class="el-menu-vertical-demo">
           <el-menu-item index="/index/chart">
             <i class="el-icon-pie-chart"></i>
@@ -49,8 +52,8 @@
         </el-menu>
       </el-aside>
       <el-main class="my-main">
-          <!-- 子路由的路由出口 -->
-          <router-view></router-view>
+        <!-- 子路由的路由出口 -->
+        <router-view></router-view>
       </el-main>
     </el-container>
   </el-container>
@@ -59,7 +62,7 @@
 <script>
 // 导入接口
 import { info, logout } from "@/api/index.js";
-import { romoveToken } from "@/utilis/token.js";
+import { romoveToken, getToken } from "@/utilis/token.js";
 export default {
   name: "index",
   data() {
@@ -97,14 +100,34 @@ export default {
         });
     }
   },
+  // 创建之前的钩子函数
+  beforeCreate() {
+    // 判断是否有token，没有代表没登录，跳转登录页
+    if (getToken() == null) {
+      // 给个提示
+      this.$message.error("请先登录");
+      // 跳回登录页面
+      this.$router.push("/login");
+    }
+  },
   // 创建之后的钩子函数
   created() {
     // 调用 获取当前的用户信息的接口方法
+    // ajax是异步请求,要等同步任务执行完毕才执行
     info().then(res => {
-      console.log(res);
-      this.username = res.data.data.username;
-      // 记得在前面拼接基地址
-      this.avater = process.env.VUE_APP_URL + "/" + res.data.data.avatar;
+      if (res.data.code == 200) {
+        this.username = res.data.data.username;
+        // 记得在前面拼接基地址
+        this.avater = process.env.VUE_APP_URL + "/" + res.data.data.avatar;
+        // 如果token错误(伪造或过期)
+      } else if (res.data.code == 206) {
+        // 给个提示
+        this.$message.error("登录状态异常,请重新登录");
+        // 删除本地token
+        removeToken();
+        // 跳回登录页面
+        this.$router.push("/login");  
+      }
     });
   }
 };
