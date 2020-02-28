@@ -29,6 +29,11 @@ import subject from '@/views/index/subject/index';
 // 设置路由规则
 const routes = [
   {
+    path: '/',
+    // 路由重定向
+    redirect:'/login'
+  },
+  {
     path: '/login',
     component: login
   },
