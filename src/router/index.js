@@ -35,32 +35,53 @@ const routes = [
   },
   {
     path: '/login',
-    component: login
+    component: login,
+    meta:{
+      title:'登录'
+    }
   },
   {
     path: '/index',
     component: index,
+    meta:{
+      title:'首页'
+    },
     children: [
       // 子路由一搬不加 /
       {
         path: 'user',
-        component: user
+        component: user,
+        meta:{
+          title:'用户列表'
+        },
       },
       {
         path: 'chart',
-        component: chart
+        component: chart,
+        meta:{
+          title:'数据概览'
+        },
       },
       {
         path: 'buisiness',
-        component: buisiness
+        component: buisiness,
+        meta:{
+          title:'企业列表'
+        },
       },
       {
         path: 'question',
-        component: question
+        component: question,
+        meta:{
+          title:'题库列表'
+        },
       },
       {
         path: 'subject',
-        component: subject
+        component: subject,
+        meta:{
+          title:'学科列表'
+        },
       },
     ]
   },]
@@ -106,9 +127,11 @@ router.beforeEach((to, from, next) => {
 })
 
 // 跳转之后调用 
-router.afterEach(() => {
+router.afterEach((to) => {
   // 结束进度条
   NProgress.done();
+  // 取出当前要去的页面的标签设置给title
+  document.title = to.meta.title;
 })
 // 暴露出去 
 export default router
