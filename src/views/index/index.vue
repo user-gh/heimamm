@@ -88,6 +88,9 @@ export default {
             this.$message.success("退出成功");
             // 调用删除token的接口方法
             removeToken();
+            // 清空vuex的数据
+            this.$store.commit('changeUsername','');
+            this.$store.commit('changeAvatar','');
             // 跳回登录页面
             this.$router.push("/login");
           });
