@@ -5,11 +5,11 @@
       <!-- inline控制表单是否为行内表单,默认是false -->
       <el-form ref="formInline" inline :model="formInline" class="demo-form-inline">
         <el-form-item label="用户名称" prop='username'>
-          <el-input class="short" v-model="formInline.eid"></el-input>
+          <el-input class="short" v-model="formInline.username"></el-input>
         </el-form-item>
 
         <el-form-item label="用户邮箱" prop='email'>
-          <el-input class="long" v-model="formInline.email"></el- input>
+          <el-input class="long" v-model="formInline.email"></el-input>
         </el-form-item>
 
         <el-form-item label="角色" prop='role_id'>
@@ -37,13 +37,18 @@
       <el-table :data="tableData" style="width: 100%">
         <!-- 设置表格的列数 -->
         <el-table-column type="index" label="序号"></el-table-column>
-        <el-table-column prop="eid" label="用户名"></el-table-column>
-        <el-table-column prop="name" label="电话"></el-table-column>
-        <el-table-column prop="short_name" label="邮箱"></el-table-column>
-        <el-table-column prop="username" label="角色"></el-table-column>
-        <el-table-column prop="username" label="备注"></el-table-column>
-        <el-table-column prop="username" label="状态"></el-table-column>
-
+        <el-table-column prop="username" label="用户名"></el-table-column>
+        <el-table-column prop="phone" label="电话"></el-table-column>
+        <el-table-column prop="email" label="邮箱"></el-table-column>
+        <el-table-column prop="role" label="角色"></el-table-column>
+        <el-table-column prop="remark" label="备注"></el-table-column>
+        <el-table-column prop="status" label="状态">
+          <template slot-scope='scope'>
+            <span v-if="scope.row.status == 1">启用</span>
+            <span v-else style="color:red">禁用</span>
+          </template>
+        </el-table-column>
+ 
         <el-table-column label="操作">
           <!-- 如果使用按钮，最好使用自定义列,可方便拿到这行的数据 -->
           <template slot-scope="scope">
@@ -85,7 +90,7 @@
       ></el-pagination>
     </el-card>
     <!-- 使用组件  -->
-   
+   <userDialog ref="userDialog"></userDialog>
   </div>
 </template>
 
@@ -93,26 +98,22 @@
 // 导入学科模块的接口方法文件
 import { userList, userStatus,userDel } from "@/api/user.js";
 
+import userDialog from './comments/userDialog';
 
 export default {
     name: "index",
     // 注册组件
-    // components:{
-
-  // },
+    components:{
+      userDialog
+  },
   data() {
     return {
-      formInline: {
-        eid:'',
-        name:'',
-        username:'',
-        status:''
-      },
+      formInline: {},
       tableData: [],
       // 当前页码
       Page: 1,
       // 页容量
-      size: 10,
+      size: 5,
       // 数据总量
       total: 0,
       // 判断是否是第一次 
@@ -154,6 +155,7 @@ export default {
         // status:this.formInline.status
         ...this.formInline
       }).then(res => {
+        console.log(res);
         // 设置表格数据源
         this.tableData = res.data.data.items;
         // 设置表格数据总量
@@ -171,6 +173,7 @@ export default {
     },
     // 搜索按钮的点击事件
     doSearch(){
+      this.page = 1;
       this.getList();
     },
     // 重置筛选点击事件
