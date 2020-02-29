@@ -111,14 +111,23 @@ router.beforeEach((to, from, next) => {
     info().then(res => {
       if (res.data.code == 200) {
         // 如果状态为1 方向，否则打回登录页
-      
+        // 启用的
+        if (res.data.store == 1) {
           // 把返回的名字存到vuex的数据仓库中
           store.commit('changeUsername', res.data.data.username);
           // 把返回的头像存到vuex的数据仓库中
           store.commit('changeAvatar', process.env.VUE_APP_URL + '/' + res.data.data.avatar);
           // 如果是真的，直接 放行
-          // Message.success('登陆成功');
+          Message.success('登陆成功');
           next()
+        } else {
+          // 禁用的
+          Message.warning('账户被禁用,请与管理员联系');
+          // 手动把进度条完成
+          NProgress.done();
+          // 打回登录页
+          to('/login');
+        }
       } else {
         // 弹出提示(在路由里this不是vue实例,所以没有this.$message)
         // this.$message.error('登录状态异常,请 重新登录');
