@@ -166,9 +166,12 @@ export default {
     changeStatus(item) {
       userStatus({
         id: item.id
-      }).then(() => {
-      // 调用获取学科列表的方法
-        this.getList();
+      }).then((res) => {
+        if(res.data.code == 200){
+          this.$message.success('状态修改成功');
+        }else{
+          this.$message.error(res.data.message);
+        }
       });
     },
     // 搜索按钮的点击事件
@@ -193,7 +196,7 @@ export default {
       this.$refs.buisinessDialog.isAdd = false
       if(item != this.oldItem){
         this.$refs.buisinessDialog.form = { ...item };
-        // 并把记录上一行数据记录成当前行的数据
+        // 并把记录上一行数据记录成当前行的数据 
         this.oldItem = item;
       }
      },
@@ -221,11 +224,11 @@ export default {
     },
     // 新增企业的点击事件
     showAdd(){
-      this.$refs.buisinessDialog.dialogFormVisible = true; 
+      this.$refs.userDialog.dialogFormVisible = true; 
       // 标记为新增状态
-      this.$refs.buisinessDialog.isAdd = true; 
+      this.$refs.userDialog.isAdd = true; 
       // 清空表单数据
-      this.$refs.buisinessDialog.form = { }
+      this.$refs.userDialog.form = { }
     }
   },
   created() {
