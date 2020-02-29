@@ -26,7 +26,7 @@
 
 <script>
 // 导入编辑接口方法文件
-import { subjectEdit } from "@/api/subject";
+import { subjectAdd } from "@/api/subject";
 export default {
   name: "subjectEdit",
   data() {
@@ -54,9 +54,9 @@ export default {
       // 做表单验证
       this.$refs.form.validate(v => {
         if (v) {
-          subjectEdit(this.form).then(res => {
+          subjectAdd(this.form).then(res => {
             if (res.data.code == 200) {
-              this.$messs.success("编辑成功");
+              this.$message.success("编辑成功");
               this.dialogFormVisible = false;
                //  调用父组件的刷新方法
               this.$parent.getList();

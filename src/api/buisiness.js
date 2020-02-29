@@ -20,6 +20,7 @@ export function buisinessStatus(data){
 
 // 封装一个增加企业的接口
 export function buisinessAdd(data){
+    console.log("进入新增");
     return Request({
         url:'/enterprise/add',
         method:'post',
@@ -29,6 +30,7 @@ export function buisinessAdd(data){
 
 // 封装一个编辑企业的接口
 export function buisinessEdit(data){
+    console.log("进入修改");
     return Request({
         url:'/enterprise/edit',
         method:'post',

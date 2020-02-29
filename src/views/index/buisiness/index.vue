@@ -26,11 +26,11 @@
         <el-form-item>
           <el-button type="primary" @click="doSearch">搜索</el-button>
           <el-button @click="clearSearch">清除</el-button>
-          <el-button @click="$refs.addDialog.dialogFormVisible = true" type="primary" icon="el-icon-plus">新增企业</el-button>
+          <el-button @click="showAdd" type="primary" icon="el-icon-plus">新增企业</el-button>
         </el-form-item>
       </el-form>
     </el-card>
-    <!-- 下面卡片 -->
+    <!-- 下面卡片 --> 
     <el-card class="box-card">
       <!-- 表格 
         data:指定表格的数据源, 设置表格显示那些数据
@@ -97,24 +97,27 @@
       ></el-pagination>
     </el-card>
     <!-- 使用组件  -->
-    <buisinessAdd ref="addDialog"></buisinessAdd>
-    <buisiness-edit ref="editDialog"></buisiness-edit>
+    <!-- <buisinessAdd ref="addDialog"></buisinessAdd>
+    <buisiness-edit ref="editDialog"></buisiness-edit> -->
+    <buisiness-dialog ref="buisinessDialog"></buisiness-dialog>
   </div>
 </template>
 
 <script>
 // 导入学科模块的接口方法文件
 import { buisinessList, buisinessStatus,buisinessDel } from "@/api/buisiness.js";
-// 导入 新增学科组件文件
-import buisinessAdd from './components/buisinessAdd.vue'
-// 导入 编辑学科组件文件
-import buisinessEdit from './components/buisinessEdit.vue'
+// // 导入 新增学科组件文件
+// import buisinessAdd from './components/buisinessAdd.vue'
+// // 导入 编辑学科组件文件
+// import buisinessEdit from './components/buisinessEdit.vue'
+import buisinessDialog from './components/buisinessDialog'
 export default {
     name: "index",
     // 注册组件
     components:{
-    buisinessAdd,
-    buisinessEdit
+    // buisinessAdd,
+    // buisinessEdit
+    buisinessDialog
   },
   data() {
     return {
@@ -201,17 +204,11 @@ export default {
     // 编辑按钮点击事件
      showEdit(item){
       //  显示出编辑窗口
-      this.$refs.editDialog.dialogFormVisible = true;
-      // 把点击当前的内容赋值给编辑对话框的 form对象
-      // this.$refs.editDialog.form = item;
-      // 拷贝一个对象(结构赋值拼接一个新的对象)
-      // 如果是第一次点击，要赋值，不是不重新赋值
-      // if(this.isFrist == true){
-      //   this.$refs.editDialog.form = { ...item };
-      //   this.isFrist = false;
-      // }
+      this.$refs.buisinessDialog.dialogFormVisible = true;
+      // 把是否添加的状态改为false
+      this.$refs.buisinessDialog.isAdd = false
       if(item != this.oldItem){
-        this.$refs.editDialog.form = { ...item };
+        this.$refs.buisinessDialog.form = { ...item };
         // 并把记录上一行数据记录成当前行的数据
         this.oldItem = item;
       }
@@ -237,6 +234,14 @@ export default {
           this.$message.error(res.data.message);
         }
        })
+    },
+    // 新增企业的点击事件
+    showAdd(){
+      this.$refs.buisinessDialog.dialogFormVisible = true; 
+      // 标记为新增状态
+      this.$refs.buisinessDialog.isAdd = true; 
+      // 清空表单数据
+      this.$refs.buisinessDialog.form = { }
     }
   },
   created() {

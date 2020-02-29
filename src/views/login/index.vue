@@ -119,7 +119,7 @@ export default {
             // window.console.log(res);
             if(res.data.code == 200){
               // 登录成功提示信息
-              this.$message.success('登录成功');
+              // this.$message.success('登录成功');
               // 把token存起来
               // window.localStorage.setItem('token',res.data.data.token);
               setToken(res.data.data.token);

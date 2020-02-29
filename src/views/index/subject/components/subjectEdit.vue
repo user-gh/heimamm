@@ -53,7 +53,7 @@ export default {
     doEdit(){
       subjectEdit(this.form).then(res => {
         if(res.data.code == 200){
-          this.$messs.success('编辑成功');
+          this.$message.success('编辑成功');
           this.dialogFormVisible = false;
           this.$parent.getList();
         }else{

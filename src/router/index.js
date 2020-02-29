@@ -32,56 +32,56 @@ const routes = [
   {
     path: '/',
     // 路由重定向
-    redirect:'/login'
+    redirect: '/login'
   },
   {
     path: '/login',
     component: login,
-    meta:{
-      title:'登录'
+    meta: {
+      title: '登录'
     }
   },
   {
     path: '/index',
     component: index,
-    meta:{
-      title:'首页'
+    meta: {
+      title: '首页'
     },
     children: [
       // 子路由一搬不加 /
       {
         path: 'user',
         component: user,
-        meta:{
-          title:'用户列表'
+        meta: {
+          title: '用户列表'
         },
       },
       {
         path: 'chart',
         component: chart,
-        meta:{
-          title:'数据概览'
+        meta: {
+          title: '数据概览'
         },
       },
       {
         path: 'buisiness',
         component: buisiness,
-        meta:{
-          title:'企业列表'
+        meta: {
+          title: '企业列表'
         },
       },
       {
         path: 'question',
         component: question,
-        meta:{
-          title:'题库列表'
+        meta: {
+          title: '题库列表'
         },
       },
       {
         path: 'subject',
         component: subject,
-        meta:{
-          title:'学科列表'
+        meta: {
+          title: '学科列表'
         },
       },
     ]
@@ -93,7 +93,7 @@ const router = new VueRouter({
 })
 
 // 定义一个白名单数组
-let whiteUrl = [ '/login' ]
+let whiteUrl = ['/login']
 
 // 导航守卫写在router对象的后面
 // 即将跳转路由之前调用
@@ -109,14 +109,17 @@ router.beforeEach((to, from, next) => {
   } else {
     // 判断token真假
     info().then(res => {
-      if(res.data.code == 200){
-        // 把返回的名字存到vuex的数据仓库中
-        store.commit('changeUsername',res.data.data.username);
-         // 把返回的头像存到vuex的数据仓库中
-        store.commit('changeAvatar',process.env.VUE_APP_URL + '/' + res.data.data.avatar);
-        // 如果是真的，直接 放行
-        next()
-      }else{
+      if (res.data.code == 200) {
+        // 如果状态为1 方向，否则打回登录页
+      
+          // 把返回的名字存到vuex的数据仓库中
+          store.commit('changeUsername', res.data.data.username);
+          // 把返回的头像存到vuex的数据仓库中
+          store.commit('changeAvatar', process.env.VUE_APP_URL + '/' + res.data.data.avatar);
+          // 如果是真的，直接 放行
+          // Message.success('登陆成功');
+          next()
+      } else {
         // 弹出提示(在路由里this不是vue实例,所以没有this.$message)
         // this.$message.error('登录状态异常,请 重新登录');
         Message.error('登录状态异常,请重新登录');
@@ -125,7 +128,7 @@ router.beforeEach((to, from, next) => {
         // 手动把进度条完成
         NProgress.done();
         // 放行到登录页
-        next('/login'); 
+        next('/login');
       }
     })
   }
