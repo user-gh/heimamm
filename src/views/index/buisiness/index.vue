@@ -4,7 +4,7 @@
     <el-card class="box-card">
       <!-- inline控制表单是否为行内表单,默认是false -->
       <el-form ref="formInline" inline :model="formInline" class="demo-form-inline">
-        <el-form-item label="企业编号" prop='rid'>
+        <el-form-item label="企业编号" prop='eid'>
           <el-input class="short" v-model="formInline.eid"></el-input>
         </el-form-item>
 
