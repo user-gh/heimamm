@@ -5,7 +5,7 @@
       <!-- inline控制表单是否为行内表单,默认是false -->
       <el-form ref="formInline" inline :model="formInline" class="demo-form-inline">
         <el-form-item label="企业编号" prop='rid'>
-          <el-input class="short" v-model="formInline.rid"></el-input>
+          <el-input class="short" v-model="formInline.eid"></el-input>
         </el-form-item>
 
         <el-form-item label="企业名称" prop='name'>
@@ -40,7 +40,7 @@
       <el-table :data="tableData" style="width: 100%">
         <!-- 设置表格的列数 -->
         <el-table-column type="index" label="序号"></el-table-column>
-        <el-table-column prop="rid" label="企业编号"></el-table-column>
+        <el-table-column prop="eid" label="企业编号"></el-table-column>
         <el-table-column prop="name" label="企业名称"></el-table-column>
         <el-table-column prop="short_name" label="简称"></el-table-column>
         <el-table-column prop="username" label="创建者"></el-table-column>
@@ -119,7 +119,7 @@ export default {
   data() {
     return {
       formInline: {
-        rid:'',
+        eid:'',
         name:'',
         username:'',
         status:''
@@ -131,7 +131,7 @@ export default {
       size: 10,
       // 数据总量
       total: 0,
-      // 判断是否是第一次
+      // 判断是否是第一次 
       // isFrist:true
       // 记录上一次dian的是哪一行
       oldItem:null

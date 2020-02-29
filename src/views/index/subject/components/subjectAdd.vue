@@ -19,14 +19,14 @@
     </el-form>
     <div slot="footer" class="dialog-footer">
       <el-button @click="dialogFormVisible = false">取 消</el-button>
-      <el-button type="primary" @click="doEdit" >确 定</el-button>
+      <el-button type="primary" @click="doEdit">确 定</el-button>
     </div>
   </el-dialog>
 </template>
 
 <script>
-  // 导入编辑接口方法文件
-import  { subjectEdit } from '@/api/subject'
+// 导入编辑接口方法文件
+import { subjectEdit } from "@/api/subject";
 export default {
   name: "subjectEdit",
   data() {
@@ -50,17 +50,22 @@ export default {
   },
   methods: {
     //  编辑确定按钮点击事件
-    doEdit(){
-      subjectEdit(this.form).then(res => {
-        if(res.data.code == 200){
-          this.$messs.success('编辑成功');
-          this.dialogFormVisible = false;
-          this.$parent.getList();
-        }else{
-          this.$message.error(res.data.message);
+    doEdit() {
+      // 做表单验证
+      this.$refs.form.validate(v => {
+        if (v) {
+          subjectEdit(this.form).then(res => {
+            if (res.data.code == 200) {
+              this.$messs.success("编辑成功");
+              this.dialogFormVisible = false;
+               //  调用父组件的刷新方法
+              this.$parent.getList();
+            } else {
+              this.$message.error(res.data.message);
+            }
+          });
         }
-      })
-      
+      });
     }
   }
 };
