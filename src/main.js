@@ -20,6 +20,8 @@ import './style/base.css';
 import router from '@/router/index'
 // 导入vuex对象
 import store from '@/store/index'
+// 导入全局过滤器
+import '@/filters/filters.js'
 // 挂载到vue实例
 new Vue({
   render: h => h(App),

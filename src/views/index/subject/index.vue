@@ -46,7 +46,7 @@
         <el-table-column prop="username" label="创建者"></el-table-column>
         <el-table-column prop="create_time" label="创建日期">
           <template slot-scope="scope">
-            {{ scope.row.create_time | formatTime }}
+            {{ scope.row.create_time | formaTime }}
           </template>
         </el-table-column>
         <el-table-column prop="status" label="状态">
