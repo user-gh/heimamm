@@ -257,4 +257,8 @@ export default {
 .long {
   width: 149px;
 }
+.el-pagination{
+  text-align: center;
+  margin-top: 30px;
+}
 </style>
