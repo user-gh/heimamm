@@ -10,7 +10,7 @@
         ></i>
         <img src="./images/logo.png" alt />
         <span>黑马面面</span>
-      </div>  
+      </div>
       <!-- 头部右边的部分 -->
       <div class="right">
         <img :src="$store.state.avatar" alt />
@@ -21,36 +21,21 @@
     <el-container>
       <!-- 左侧导航菜单部分 -->
       <el-aside class="my-aside" width="auto">
-        <!-- router 为 true 启用路由模式，false为不启用 
+        <el-menu router :collapse='isCollapse' default-active='1' class='el-menu-vertical-demo'>
+          <!-- router 为 true 启用路由模式，false为不启用 
                 以被点击的菜单的index属性作为路径跳转
         -->
-        <el-menu router :collapse="isCollapse" default-active="1" class="el-menu-vertical-demo">
-          <el-menu-item index="/index/chart">
-            <i class="el-icon-pie-chart"></i>
-            <span slot="title">数据概览</span>
-          </el-menu-item>
+          <template v-for="(item, index) in childrenRoutes">
+            <el-menu-item :key="index" :index="'/index/'+ item.path" v-if="item.meta.routes.includes($store.state.role)" >
+              <i class="el-icon-pie-chart"></i>
+              <span slot="title">{{item.meta.title}}</span>
+            </el-menu-item>
 
-          <el-menu-item index="/index/user">
-            <i class="el-icon-user"></i>
-            <span slot="title">用户列表</span>
-          </el-menu-item>
-
-          <el-menu-item index="/index/question">
-            <i class="el-icon-edit-outline"></i>
-            <span slot="title">题库列表</span>
-          </el-menu-item>
-
-          <el-menu-item index="/index/buisiness">
-            <i class="el-icon-office-building"></i>
-            <span slot="title">企业列表</span>
-          </el-menu-item>
-
-          <el-menu-item index="/index/subject">
-            <i class="el-icon-notebook-2"></i>
-            <span slot="title">学科列表</span>
-          </el-menu-item>
+          </template>
+            
         </el-menu>
       </el-aside>
+
       <el-main class="my-main">
         <!-- 子路由的路由出口 -->
         <router-view></router-view>
@@ -63,6 +48,8 @@
 // 导入接口
 import { logout } from "@/api/index.js";
 import { removeToken, getToken } from "@/utilis/token.js";
+// 导入子路由规则
+import childrenRoutes from "@/router/childrenRoutes.js";
 export default {
   name: "index",
   data() {
@@ -70,7 +57,9 @@ export default {
       username: "",
       avater: "",
       // 是否折叠菜单
-      isCollapse: false
+      isCollapse: false,
+      // 把路由的规则数组存到data
+      childrenRoutes
     };
   },
   // 方法集合
@@ -89,8 +78,8 @@ export default {
             // 调用删除token的接口方法
             removeToken();
             // 清空vuex的数据
-            this.$store.commit('changeUsername','');
-            this.$store.commit('changeAvatar','');
+            this.$store.commit("changeUsername", "");
+            this.$store.commit("changeAvatar", "");
             // 跳回登录页面
             this.$router.push("/login");
           });
@@ -112,7 +101,7 @@ export default {
       // 跳回登录页面
       this.$router.push("/login");
     }
-  },
+  }
 };
 </script>
 
