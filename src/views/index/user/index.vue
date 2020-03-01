@@ -191,11 +191,11 @@ export default {
     // 编辑按钮点击事件
      showEdit(item){
       //  显示出编辑窗口
-      this.$refs.buisinessDialog.dialogFormVisible = true;
+      this.$refs.userDialog.dialogFormVisible = true;
       // 把是否添加的状态改为false
-      this.$refs.buisinessDialog.isAdd = false
+      this.$refs.userDialog.isAdd = false
       if(item != this.oldItem){
-        this.$refs.buisinessDialog.form = { ...item };
+        this.$refs.userDialog.form = { ...item };
         // 并把记录上一行数据记录成当前行的数据 
         this.oldItem = item;
       }

@@ -9,17 +9,6 @@ export default [
 
     // 子路由一搬不加 /
     {
-        path: 'user',
-        component: user,
-        meta: {
-            title: '用户列表',
-            routes: [
-                '超级管理员',
-                '管理员'
-            ]
-        },
-    },
-    {
         path: 'chart',
         component: chart,
         meta: {
@@ -27,7 +16,21 @@ export default [
             routes: [
                 '超级管理员',
                 '管理员'
-            ]
+            ],
+            icon:"el-icon-pie-chart"
+        },
+    },
+    {
+        path: 'user',
+        component: user,
+        meta: {
+            title: '用户列表',
+            routes: [
+                '超级管理员',
+                '管理员'
+            ],
+            icon:'el-icon-user'
+            
         },
     },
     {
@@ -39,7 +42,8 @@ export default [
                 '超级管理员',
                 '管理员',
                 '老师'
-            ]
+            ],
+            icon:"el-icon-edit-outline"
         },
     },
     {
@@ -52,7 +56,8 @@ export default [
                 '管理员',
                 '老师',
                 '学生'
-            ]
+            ],
+            icon:"el-icon-office-building"
         },
     },
     {
@@ -65,7 +70,8 @@ export default [
                 '管理员',
                 '老师',
                 '学生'
-            ]
+            ],
+            icon:"el-icon-notebook-2"
         },
     },
 ]
