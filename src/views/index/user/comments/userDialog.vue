@@ -83,7 +83,7 @@ export default {
     //  新增用户确定按钮点击事件
     save() {
       // 整个表单验证
-      this.$refs.form.velidate(v => {
+      this.$refs.form.validate(v => {
         if (v) {
           if (this.isAdd) {
             // 调用新增方法接口发送请求
