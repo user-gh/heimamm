@@ -87,4 +87,7 @@ export default {
 </script>
 
 <style>
+.el-card__body{
+  padding-bottom: 0;
+}
 </style>

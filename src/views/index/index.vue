@@ -30,12 +30,9 @@
               <i :class="item.meta.icon"></i>
               <span slot="title">{{item.meta.title}}</span>
             </el-menu-item>
-
-          </template>
-            
+          </template>  
         </el-menu>
       </el-aside>
-
       <el-main class="my-main">
         <!-- 子路由的路由出口 -->
         <router-view></router-view>

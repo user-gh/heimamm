@@ -85,7 +85,7 @@ router.beforeEach((to, from, next) => {
       if (res.data.code == 200) {
         // 如果状态为1 方向，否则打回登录页
         // 账号启用状态
-        if (res.data.data.status == 1) {
+        if (res.data.data.status == 1) {  
           // 把返回的名字存到vuex的数据仓库中
           store.commit('changeUsername', res.data.data.username);
           // 把返回的头像存到vuex的数据仓库中
