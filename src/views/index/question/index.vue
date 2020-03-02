@@ -80,13 +80,17 @@
       <el-table border :data="tableData" style="width: 100%">
         <el-table-column type="index" label="序号"></el-table-column>
         <el-table-column prop="title" label="题目"></el-table-column>
-        <el-table-column prop="subject_name" label="学科.阶段"></el-table-column>
-        <el-table-column label="阶段"></el-table-column>
+        <el-table-column prop="subject_name" label="学科.阶段">
+          <template slot-scope="scope">
+            <!-- 过滤器 -->
+            {{ scope.row | formatSubjectStep}}
+          </template>
+        </el-table-column>
         <el-table-column prop="type" label="题型">
           <template slot-scope="scope">
             <span v-if="scope.row.type == 1 ">单选</span>
             <span v-else-if="scope.row.type == 2">多选</span>
-            <span v-else-if="scope.row.type == 3 ">简答</span>
+            <span v-else>简答</span>
           </template>
         </el-table-column>
         <el-table-column prop="enterprise_name" label="企业"></el-table-column>
@@ -94,11 +98,11 @@
         <el-table-column prop="status" label="状态">
           <template slot-scope="scope">
             <span v-if="scope.row.status == 1">启用</span>
-            <span v-else-if="scope.row.status == 0">禁用</span>
+            <span v-else>禁用</span>
           </template>
         </el-table-column>
         <el-table-column prop="reads" label="访问量"></el-table-column>
-        <el-table-column prop="address" label="操作" width="135px">
+        <el-table-column label="操作" width="135px">
           <template>
             <el-button type="text">编辑</el-button>
             <el-button type="text">启用</el-button>
@@ -167,7 +171,24 @@ export default {
     }).then(res => {
       console.log(res);
       this.tableData = res.data.data.items;
+      this.total = res.data.data.pagination.total;
     });
+  },
+  // 过滤器
+  filters:{
+    formatSubjectStep(val){
+      // 学科名: val.subject_name
+      // 阶段名:  if 判断
+      let stepName = '';
+      if(val.step == 1){
+        stepName = '初级';
+      }else if(val.step == 2){
+        stepName = '中级';
+      }else{
+        stepName = '高级';
+      }
+      return val.subject_name + ' · ' + stepName;
+    }
   }
 };
 </script>
