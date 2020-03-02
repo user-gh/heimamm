@@ -56,7 +56,7 @@ export default {
         if (v) {
           subjectAdd(this.form).then(res => {
             if (res.data.code == 200) {
-              this.$message.success("编辑成功");
+              this.$message.success("新增成功");
               this.dialogFormVisible = false;
                //  调用父组件的刷新方法
               this.$parent.getList();

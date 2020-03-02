@@ -40,7 +40,7 @@ export function buisinessEdit(data){
 
 
 // 封装一个删除学科的接口
-export function subjectDel(data){
+export function  buisinessDel(data){
     return Request({
         url:'/enterprise/remove',
         method:'post',
