@@ -1,12 +1,12 @@
 <template>
   <div class="question-warp">
     <el-card>
-      <el-form :inline="true" :model="formInline" class="demo-form-inline">
-        <el-form-item label="学科">
+      <el-form ref="formInline" :inline="true" :model="formInline" class="demo-form-inline">
+        <el-form-item label="学科" prop='subject'>
           <subjectSelect v-model="formInline.subject"></subjectSelect>
         </el-form-item>
 
-        <el-form-item label="阶段">
+        <el-form-item label="阶段" prop='step'>
           <el-select v-model="formInline.step" placeholder="请选择阶段">
             <el-option label="初级" value="1"></el-option>
             <el-option label="中级" value="2"></el-option>
@@ -14,11 +14,11 @@
           </el-select>
         </el-form-item>
 
-        <el-form-item label="企业">
+        <el-form-item label="企业" prop='enterprise'>
           <buisinessSelect v-model="formInline.enterprise"></buisinessSelect>
         </el-form-item>
 
-        <el-form-item label="题型">
+        <el-form-item label="题型" prop='type'>
           <el-select v-model="formInline.type" placeholder="请选择题型">
             <el-option label="单选" value="1"></el-option>
             <el-option label="多选" value="2"></el-option>
@@ -26,7 +26,7 @@
           </el-select>
         </el-form-item>
         <br />
-        <el-form-item label="难度">
+        <el-form-item label="难度" prop='difficulty'>
           <el-select v-model="formInline.difficulty" placeholder="请选择难度">
             <el-option label="简单" value="1"></el-option>
             <el-option label="一般" value="2"></el-option>
@@ -34,29 +34,29 @@
           </el-select>
         </el-form-item>
 
-        <el-form-item label="作者">
+        <el-form-item label="作者" prop='username'>
           <el-input v-model="formInline.username"></el-input>
         </el-form-item>
 
-        <el-form-item label="状态">
+        <el-form-item label="状态" prop='status'>
           <el-select v-model="formInline.status" placeholder="请选择状态">
             <el-option label="启用" value="1"></el-option>
             <el-option label="禁用" value></el-option>
           </el-select>
         </el-form-item>
 
-        <el-form-item label="日期">
+        <el-form-item label="日期" prop='create_date'>
           <el-date-picker v-model="formInline.create_date " type="date" placeholder="选择日期"></el-date-picker>
         </el-form-item>
 
         <br />
-        <el-form-item label="标题" class="title-item">
+        <el-form-item label="标题" class="title-item" prop='title'>
           <el-input v-model="formInline.title"></el-input>
         </el-form-item>
 
         <el-form-item>
-          <el-button type="primary">搜索</el-button>
-          <el-button>清除</el-button>
+          <el-button type="primary" @click="doSearch">搜索</el-button>
+          <el-button @click="clearSearch">清除</el-button>
           <el-button type="primary" icon="el-icon-plus" @click="questionAdd">新增试题</el-button>
         </el-form-item>
       </el-form>
@@ -95,7 +95,11 @@
               type="text"
               @click="changeStatus(scope.row)"
             >{{scope.row.status === 1 ? '启用' : '禁用'}}</el-button>
-            <el-button type="text">删除</el-button>
+            <el-button
+              type="text"
+              @click="doDel(scope.row)"
+              v-if="['超级管理员','管理员'].includes($store.state.role)"
+            >删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -115,7 +119,7 @@
 </template>
 
 <script>
-import { questionList,questionStatus } from "@/api/question";
+import { questionList, questionStatus, questionDel } from "@/api/question";
 // 导入新增对话框
 import questionAdd from "./commponts/questionAdd.vue";
 export default {
@@ -166,14 +170,50 @@ export default {
       this.$refs.questionAdd.dialogFormVisible = true;
     },
     // 改变状态的点击事件
-    changeStatus(item){
+    changeStatus(item) {
       // 调用设置题库列表题目状态的方法
       questionStatus({
-        id:item.id
-      }).then(()=> {
-         // 调用获取学科列表的方法
+        id: item.id
+      }).then(() => {
+        // 调用获取学科列表的方法
         this.getList();
-      })
+      });
+    },
+    // 重置表单
+    clearSearch() {
+      console.log("重置表单");
+      // 表单对象的重置方法
+      // 要想表单有重置方法,要给每一项加prop属性
+      this.$refs.formInline.resetFields();
+      // 根据最新的表单内容重新调用请求
+      this.page = 1;
+      this.getList();
+    },
+    // 搜索点击事件
+    doSearch(){
+      this.getList();
+    },
+    // 删除题目的点击事件
+    doDel(item) {
+      // 调用删除题目对的方法
+      questionDel({
+        id: item.id
+      }).then(res => {
+        if (res.data.code == 200) {
+          this.$message.success("删除成功");
+          // 如果是最后一页，那么刷新上一页
+          if (this.tableData.length == 1) {
+            this.page--;
+          }
+          // 如果是最后为 0
+          if (this.page == 0) {
+            this.page = 1;
+          }
+          this.getList();
+        } else {
+          this.$message.error(res.data.message);
+        }
+      });
     }
   },
   created() {
