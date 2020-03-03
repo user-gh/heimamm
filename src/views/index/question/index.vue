@@ -131,11 +131,31 @@ export default {
     };
   },
   methods: {
-    handleSizeChange(val) {
-      console.log(`每页 ${val} 条`);
+    // 获取题库列表
+    getList() {
+      // 获取题库列表
+      questionList({
+        page: this.page,
+        limit: this.size
+      }).then(res => {
+        console.log(res);
+        this.tableData = res.data.data.items;
+        this.total = res.data.data.pagination.total;
+      });
     },
-    handleCurrentChange(val) {
-      console.log(`当前页: ${val}`);
+    handleSizeChange(size) {
+      // 把改变后的页容量赋值给this.size
+      this.size = size;
+      // 只要页容量改变，都应该从第一页重新显示
+      this.page = 1;
+      // 根据新的页容量请求数据
+      this.getList();
+    },
+    handleCurrentChange(page) {
+      // 把改变后的页码赋值给this.page
+      this.page = page;
+      // 根据新的页码请求数据
+      this.getList();
     },
     // 新增试题点击事件
     questionAdd() {
@@ -144,15 +164,8 @@ export default {
     }
   },
   created() {
-    // 获取题库列表
-    questionList({
-      page: this.page,
-      limit: this.size
-    }).then(res => {
-      console.log(res);
-      this.tableData = res.data.data.items;
-      this.total = res.data.data.pagination.total;
-    });
+    // 调用获取题库列表的方法
+    this.getList();
   },
   // 过滤器
   filters: {
