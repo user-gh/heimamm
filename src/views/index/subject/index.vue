@@ -67,7 +67,7 @@
             <el-button
               type="text"
               @click="changeStatus(scope.row)"
-            >{{scope.row.status === 1 ? '禁用' : '启用'}}</el-button>
+            >{{scope.row.status === 1 ? '启用' : '禁用'}}</el-button>
             <el-button type="text" @click="doDel(scope.row)" v-if="['超级管理员','管理员'].includes($store.state.role)">删除</el-button>
           </template>
         </el-table-column>

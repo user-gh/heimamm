@@ -84,14 +84,17 @@
         <el-table-column prop="status" label="状态">
           <template slot-scope="scope">
             <span v-if="scope.row.status == 1">启用</span>
-            <span v-else>禁用</span>
+            <span v-else style="color:red;">禁用</span>
           </template>
         </el-table-column>
         <el-table-column prop="reads" label="访问量"></el-table-column>
         <el-table-column label="操作" width="135px">
-          <template>
+          <template slot-scope="scope">
             <el-button type="text">编辑</el-button>
-            <el-button type="text">启用</el-button>
+            <el-button
+              type="text"
+              @click="changeStatus(scope.row)"
+            >{{scope.row.status === 1 ? '启用' : '禁用'}}</el-button>
             <el-button type="text">删除</el-button>
           </template>
         </el-table-column>
@@ -112,7 +115,7 @@
 </template>
 
 <script>
-import { questionList } from "@/api/question";
+import { questionList,questionStatus } from "@/api/question";
 // 导入新增对话框
 import questionAdd from "./commponts/questionAdd.vue";
 export default {
@@ -161,6 +164,16 @@ export default {
     questionAdd() {
       // 打开新增试题对话框
       this.$refs.questionAdd.dialogFormVisible = true;
+    },
+    // 改变状态的点击事件
+    changeStatus(item){
+      // 调用设置题库列表题目状态的方法
+      questionStatus({
+        id:item.id
+      }).then(()=> {
+         // 调用获取学科列表的方法
+        this.getList();
+      })
     }
   },
   created() {
