@@ -4,7 +4,7 @@
       v-for="(item, index) in buisinessList"
       :key="index"
       :label="item.name"
-      value="item.id"
+      :value="item.id"
     ></el-option>
   </el-select>
 </template>

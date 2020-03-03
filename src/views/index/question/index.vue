@@ -3,7 +3,7 @@
     <el-card>
       <el-form :inline="true" :model="formInline" class="demo-form-inline">
         <el-form-item label="学科">
-         <subjectSelect v-model="formInline.subject"></subjectSelect>
+          <subjectSelect v-model="formInline.subject"></subjectSelect>
         </el-form-item>
 
         <el-form-item label="阶段">
@@ -15,7 +15,7 @@
         </el-form-item>
 
         <el-form-item label="企业">
-         <buisinessSelect v-model="formInline.enterprise"></buisinessSelect>
+          <buisinessSelect v-model="formInline.enterprise"></buisinessSelect>
         </el-form-item>
 
         <el-form-item label="题型">
@@ -42,7 +42,7 @@
           <el-select v-model="formInline.status" placeholder="请选择状态">
             <el-option label="启用" value="1"></el-option>
             <el-option label="禁用" value></el-option>
-          </el-select>  
+          </el-select>
         </el-form-item>
 
         <el-form-item label="日期">
@@ -57,7 +57,7 @@
         <el-form-item>
           <el-button type="primary">搜索</el-button>
           <el-button>清除</el-button>
-          <el-button type="primary" icon="el-icon-plus">新增试题</el-button>
+          <el-button type="primary" icon="el-icon-plus" @click="questionAdd">新增试题</el-button>
         </el-form-item>
       </el-form>
     </el-card>
@@ -107,13 +107,19 @@
         :total="total"
       ></el-pagination>
     </el-card>
+    <question-add ref="questionAdd" />
   </div>
 </template>
 
 <script>
 import { questionList } from "@/api/question";
+// 导入新增对话框
+import questionAdd from "./commponts/questionAdd.vue";
 export default {
-  name: "index",
+  name: "question",
+  components: {
+    questionAdd
+  },
   data() {
     return {
       formInline: {},
@@ -130,6 +136,11 @@ export default {
     },
     handleCurrentChange(val) {
       console.log(`当前页: ${val}`);
+    },
+    // 新增试题点击事件
+    questionAdd() {
+      // 打开新增试题对话框
+      this.$refs.questionAdd.dialogFormVisible = true;
     }
   },
   created() {
@@ -144,52 +155,54 @@ export default {
     });
   },
   // 过滤器
-  filters:{
-    formatSubjectStep(val){
+  filters: {
+    formatSubjectStep(val) {
       // 学科名: val.subject_name
       // 阶段名:  if 判断
-      let stepName = '';
-      if(val.step == 1){
-        stepName = '初级';
-      }else if(val.step == 2){
-        stepName = '中级';
-      }else{
-        stepName = '高级';
+      let stepName = "";
+      if (val.step == 1) {
+        stepName = "初级";
+      } else if (val.step == 2) {
+        stepName = "中级";
+      } else {
+        stepName = "高级";
       }
-      return val.subject_name + ' · ' + stepName;
+      return val.subject_name + " · " + stepName;
     }
   }
 };
 </script>
 
-<style lang='less'>
+<style lang='less' >
 .question-warp {
-  /* 找到除了最后一个el-form-item下面的所有  el-form-item__content*/
-  .el-form-item:not(:last-child) .el-form-item__content {
-    width: 150px;
-  }
+  .el-form--inline {
+    /* 找到除了最后一个el-form-item下面的所有  el-form-item__content*/
+    .el-form-item:not(:last-child) .el-form-item__content {
+      width: 150px;
+    }
 
-  /* /* 找到标题那一栏里的内容,设置它的内容宽度为388px */
-  .el-form-item.title-item .el-form-item__content {
-    width: 388px;
-  }
+    /* /* 找到标题那一栏里的内容,设置它的内容宽度为388px */
+    .el-form-item.title-item .el-form-item__content {
+      width: 388px;
+    }
 
-  .el-form-item .el-form-item__content .el-date-editor {
-    width: 150px;
+    .el-form-item .el-form-item__content .el-date-editor {
+      width: 150px;
+    }
+    /* 设置每个表单元素前面文字的左右内边距 */
+    .el-form-item__label {
+      padding-right: 31px;
+      padding-left: 30px;
+    }
+    /* 设置卡片的内边距 */
+    .el-card__body {
+      padding-left: 0;
+    }
   }
-  /* 设置每个表单元素前面文字的左右内边距 */
-  .el-form-item__label {
-    padding-right: 31px;
-    padding-left: 30px;
-  }
-  /* 设置卡片的内边距 */
-  .el-card__body {
-    padding-left: 0;
-  }
-  .bottom-card{
+  .bottom-card {
     margin-top: 21px;
   }
-  .el-pagination{
+  .el-pagination {
     margin-top: 31px;
     margin-bottom: 22px;
   }
