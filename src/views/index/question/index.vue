@@ -3,14 +3,7 @@
     <el-card>
       <el-form :inline="true" :model="formInline" class="demo-form-inline">
         <el-form-item label="学科">
-          <el-select v-model="formInline.subject" placeholder="请选择学科">
-            <el-option
-              v-for="(item, index) in subjectList"
-              :key="index"
-              :label="item.name"
-              value="item.id"
-            ></el-option>
-          </el-select>
+         <subjectSelect v-model="formInline.subject"></subjectSelect>
         </el-form-item>
 
         <el-form-item label="阶段">
@@ -22,14 +15,7 @@
         </el-form-item>
 
         <el-form-item label="企业">
-          <el-select v-model="formInline.enterprise" placeholder="请选择企业">
-            <el-option
-              v-for="(item, index) in buisinessList"
-              :key="index"
-              :label="item.name"
-              value="item.id"
-            ></el-option>
-          </el-select>
+         <buisinessSelect v-model="formInline.enterprise"></buisinessSelect>
         </el-form-item>
 
         <el-form-item label="题型">
@@ -111,7 +97,7 @@
         </el-table-column>
       </el-table>
       <el-pagination
-        backgroud
+        background
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
         :current-page="page"
@@ -125,16 +111,12 @@
 </template>
 
 <script>
-import { subjectList } from "@/api/subject";
-import { buisinessList } from "@/api/buisiness";
 import { questionList } from "@/api/question";
 export default {
   name: "index",
   data() {
     return {
       formInline: {},
-      subjectList: [],
-      buisinessList: [],
       // 表格绑定的数据源
       tableData: [],
       size: 10,
@@ -151,19 +133,6 @@ export default {
     }
   },
   created() {
-    // 获取学科列表
-    subjectList({
-      state: 1
-    }).then(res => {
-      console.log(res);
-      this.subjectList = res.data.data.items;
-    });
-    // 获取企业列表
-    buisinessList({
-      state: 1
-    }).then(res => {
-      this.buisinessList = res.data.data.items;
-    });
     // 获取题库列表
     questionList({
       page: this.page,

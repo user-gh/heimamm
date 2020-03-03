@@ -260,5 +260,6 @@ export default {
 .el-pagination{
   text-align: center;
   margin-top: 30px;
+  margin-bottom: 22px;
 }
 </style>

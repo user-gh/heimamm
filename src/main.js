@@ -15,6 +15,11 @@ Vue.use(ElementUI);
 // import '@/style/main.css'
 import './style/base.css';
 
+// 导入学科和企业下拉框全局组件
+import subjectSelect from './components/subjectSelect.vue';
+import buisinessSelect from './components/buisinessSelect.vue';
+Vue.component('subjectSelect',subjectSelect);  
+Vue.component('buisinessSelect',buisinessSelect);  
 
 // 导入路由对象，默认先找js文件
 import router from '@/router/index'
