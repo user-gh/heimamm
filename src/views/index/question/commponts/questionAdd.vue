@@ -45,31 +45,28 @@
       </el-form-item>
       <el-form-item v-if="form.type == 1" label="单选" :label-width="formLabelWidth">
         <el-radio-group v-model="form.single_select_answer">
-          <div class="opction-box" v-for="(item, index) in form.select_options" :key="index">
-            <el-radio :label="item.label"></el-radio>
-            <el-input class="input-box" type="text" v-model="item.text"></el-input>
-            <!-- 
-              action:上传的路径 
-            -->
-            <el-upload
-              class="avatar-uploader"
-              action="https://jsonplaceholder.typicode.com/posts/"
-              :show-file-list="false"
-              :on-success="handleAvatarSuccess"
-              :before-upload="beforeAvatarUpload"
-            >
-              <img v-if="item.image" :src="item.image" class="avatar" />
-              <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-            </el-upload>
-          </div>
+          <!-- 导入选项组件 -->
+          <opctionItem
+            v-for="(item, index) in form.select_options"
+            :key="index"
+            :label="item.label"
+            :text.sync="item.text"
+            :image.sync="item.image"
+          />
         </el-radio-group>
       </el-form-item>
       <el-form-item v-else-if="form.type == 2" label="多选" :label-width="formLabelWidth">
         <div>
           <el-checkbox-group v-model="form.multiple_select_answer">
-            <el-checkbox label="A"></el-checkbox>
-            <el-checkbox label="B"></el-checkbox>
-            <el-checkbox label="C"></el-checkbox>
+            <!-- 导入选项组件 -->
+            <opctionItem
+              :isRadio='false'
+              v-for="(item, index) in form.select_options"
+              :key="index"
+              :label="item.label"
+              :text.sync="item.text"
+              :image.sync="item.image"
+            />
           </el-checkbox-group>
         </div>
       </el-form-item>
@@ -88,11 +85,13 @@
 // 导入省市联动数据
 import ChinaAear from "./ChinaAear.vue";
 import myEditor from "./myEditor.vue";
+import opctionItem from "./opctionItem.vue";
 export default {
   name: "questionAdd",
   components: {
     ChinaAear,
-    myEditor
+    myEditor,
+    opctionItem
   },
   data() {
     return {
@@ -134,23 +133,7 @@ export default {
       formLabelWidth: "306px"
     };
   },
-  methods: {
-    handleAvatarSuccess(res, file) {
-      this.imageUrl = URL.createObjectURL(file.raw);
-    },
-    beforeAvatarUpload(file) {
-      const isJPG = file.type === "image/jpeg";
-      const isLt2M = file.size / 1024 / 1024 < 2;
-
-      if (!isJPG) {
-        this.$message.error("上传头像图片只能是 JPG 格式!");
-      }
-      if (!isLt2M) {
-        this.$message.error("上传头像图片大小不能超过 2MB!");
-      }
-      return isJPG && isLt2M;
-    }
-  }
+  methods: {}
 };
 </script>
 
@@ -176,41 +159,6 @@ export default {
     .Editor {
       width: 835px;
     }
-  }
-  .opction-box {
-    display: flex;
-    align-items: center;
-    margin-top: 20px;
-  }
-
-  .input-box {
-    width: 476px;
-    height: 40px;
-  }
-
-  .avatar-uploader .el-upload {
-    border: 1px dashed #d9d9d9;
-    border-radius: 6px;
-    cursor: pointer;
-    position: relative;
-    overflow: hidden;
-    margin-left: 41px;
-  }
-  .avatar-uploader .el-upload:hover {
-    border-color: #409eff;
-  }
-  .avatar-uploader-icon {
-    font-size: 28px;
-    color: #8c939d;
-    width: 178px;
-    height: 178px;
-    line-height: 178px;
-    text-align: center;
-  }
-  .avatar {
-    width: 178px;
-    height: 178px;
-    display: block;
   }
 }
 </style>
