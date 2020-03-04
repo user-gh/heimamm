@@ -1,16 +1,16 @@
 <template>
   <div class="question-warp">
     <el-card>
-      <el-form ref="formInline" :inline="true" :model="formInline" class="demo-form-inline">
+      <el-form destroy-on-close ref="formInline" :inline="true" :model="formInline" class="demo-form-inline">
         <el-form-item label="学科" prop='subject'>
           <subjectSelect v-model="formInline.subject"></subjectSelect>
         </el-form-item>
 
         <el-form-item label="阶段" prop='step'>
           <el-select v-model="formInline.step" placeholder="请选择阶段">
-            <el-option label="初级" value="1"></el-option>
-            <el-option label="中级" value="2"></el-option>
-            <el-option label="高级" value="3"></el-option>
+            <el-option label="初级" :value="1"></el-option>
+            <el-option label="中级" :value="2"></el-option>
+            <el-option label="高级" :value="3"></el-option>
           </el-select>
         </el-form-item>
 
@@ -20,16 +20,16 @@
 
         <el-form-item label="题型" prop='type'>
           <el-select v-model="formInline.type" placeholder="请选择题型">
-            <el-option label="单选" value="1"></el-option>
-            <el-option label="多选" value="2"></el-option>
-            <el-option label="简答" value="3"></el-option>
+            <el-option label="单选" :value="1"></el-option>
+            <el-option label="多选" :value="2"></el-option>
+            <el-option label="简答" :value="3"></el-option>
           </el-select>
         </el-form-item>
         <br />
         <el-form-item label="难度" prop='difficulty'>
           <el-select v-model="formInline.difficulty" placeholder="请选择难度">
-            <el-option label="简单" value="1"></el-option>
-            <el-option label="一般" value="2"></el-option>
+            <el-option label="简单" :value="1"></el-option>
+            <el-option label="一般" :value="2"></el-option>
             <el-option label="困难" value="3"></el-option>
           </el-select>
         </el-form-item>
@@ -165,7 +165,9 @@ export default {
       this.getList();
     },
     // 新增试题点击事件
-    questionAdd() {
+    questionAdd(
+      
+    ) {
       // 打开新增试题对话框
       this.$refs.questionAdd.dialogFormVisible = true;
     },
@@ -181,7 +183,6 @@ export default {
     },
     // 重置表单
     clearSearch() {
-      console.log("重置表单");
       // 表单对象的重置方法
       // 要想表单有重置方法,要给每一项加prop属性
       this.$refs.formInline.resetFields();
