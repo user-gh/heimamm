@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="toolbar" ref="toolbar"></div>
-    <div class="content" ref="content"></div>
+    <div class="content" ref="content">{{value}}</div>
   </div>
 </template>
 <script>
