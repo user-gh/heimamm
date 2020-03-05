@@ -3,7 +3,7 @@
     <el-card>
       <el-form destroy-on-close ref="formInline" :inline="true" :model="formInline" class="demo-form-inline">
         <el-form-item label="学科" prop='subject'>
-          <subjectSelect v-model="formInline.subject"></subjectSelect>
+          <subjectSelect :isSearch='true' v-model="formInline.subject"></subjectSelect>
         </el-form-item>
 
         <el-form-item label="阶段" prop='step'>
@@ -15,11 +15,12 @@
         </el-form-item>
 
         <el-form-item label="企业" prop='enterprise'>
-          <buisinessSelect v-model="formInline.enterprise"></buisinessSelect>
+          <buisinessSelect :isSearch='true' v-model="formInline.enterprise"></buisinessSelect>
         </el-form-item>
 
         <el-form-item label="题型" prop='type'>
           <el-select v-model="formInline.type" placeholder="请选择题型">
+            <el-option label="所有题型" value=""></el-option>
             <el-option label="单选" :value="1"></el-option>
             <el-option label="多选" :value="2"></el-option>
             <el-option label="简答" :value="3"></el-option>
@@ -40,8 +41,9 @@
 
         <el-form-item label="状态" prop='status'>
           <el-select v-model="formInline.status" placeholder="请选择状态">
+            <el-option label="所有状态" value=""></el-option>
             <el-option label="启用" value="1"></el-option>
-            <el-option label="禁用" value></el-option>
+            <el-option label="禁用" value='0'></el-option>
           </el-select>
         </el-form-item>
 
@@ -146,7 +148,8 @@ export default {
       // 获取题库列表
       questionList({
         page: this.page,
-        limit: this.size
+        limit: this.size,
+        ...this.formInline
       }).then(res => {
         console.log(res);
         this.tableData = res.data.data.items;

@@ -1,5 +1,6 @@
 <template>
   <el-select v-model="enterprise" placeholder="请选择企业"  @change="selChange">
+    <el-option v-if="isSearch" value=''>所有企业</el-option>
     <el-option
       v-for="(item, index) in buisinessList"
       :key="index"
@@ -16,6 +17,10 @@ export default {
   props: {
     value: {
       default: ""
+    },
+    isSearch:{
+      type:Boolean,
+      default:false
     }
   },
   data() {
