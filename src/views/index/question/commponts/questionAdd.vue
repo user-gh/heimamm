@@ -99,7 +99,7 @@
           <el-button size="small" type="primary">点击上传</el-button>
           <div slot="tip" class="el-upload__tip">只能上传视频格式文件</div>
         </el-upload>
-        <video :src="videoUrl" controls></video>
+        <video v-if="isVideo" :src="videoUrl" width="800px" height="500px" controls></video>
       </el-form-item>
       <el-form-item>
         <div class="Line">
@@ -234,6 +234,7 @@ export default {
           }
         ]
       },
+      isVideo:false,
       // 预览视频
       videoUrl: "",
       dialogFormVisible: false,
@@ -242,9 +243,8 @@ export default {
   },
   methods: {
     handleAvatarSuccess(res, file) {
-      this.imageUrl = URL.createObjectURL(file.raw);
-      console.log(res.data.url);
-      this.videoUrl = res.data.url;
+      this.videoUrl = URL.createObjectURL(file.raw);
+      this.isVideo = true;
     },
     beforeAvatarUpload(file) {
       const isJPG = file.type === "video/mp4";

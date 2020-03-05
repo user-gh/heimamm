@@ -29,6 +29,13 @@ export default {
       subjectList: []
     }; 
   },
+  // 监听value的值，只要改变,把value的值赋给subject
+  watch: {
+    // val : 改变后的值
+    value(val){
+      this.subject = val;
+    }
+  },
   methods: {
     // 给改变事件
     // 把改变后的值传给父组件

@@ -29,6 +29,13 @@ export default {
       buisinessList:[]
     };
   },
+  // 监听器
+  watch: {
+    // 监听value，只要value值改变了,把它赋值给enterpirse
+    value(val){
+      this.enterprise = val;
+    }
+  },
   methods: {
     selChange(val) {
       this.$emit("input", val);
