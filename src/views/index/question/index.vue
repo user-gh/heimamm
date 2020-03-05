@@ -193,6 +193,7 @@ export default {
       questionStatus({
         id: item.id
       }).then(() => {
+        this.$message.success("状态修改成功");
         // 调用获取学科列表的方法
         this.getList();
       });

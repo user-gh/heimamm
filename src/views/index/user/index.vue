@@ -4,15 +4,15 @@
     <el-card class="box-card">
       <!-- inline控制表单是否为行内表单,默认是false -->
       <el-form ref="formInline" inline :model="formInline" class="demo-form-inline">
-        <el-form-item label="用户名称" prop='username'>
+        <el-form-item label="用户名称" prop="username">
           <el-input class="short" v-model="formInline.username"></el-input>
         </el-form-item>
 
-        <el-form-item label="用户邮箱" prop='email'>
+        <el-form-item label="用户邮箱" prop="email">
           <el-input class="long" v-model="formInline.email"></el-input>
         </el-form-item>
 
-        <el-form-item label="角色" prop='role_id'>
+        <el-form-item label="角色" prop="role_id">
           <el-select class="long" v-model="formInline.role_id" placeholder="请选择">
             <el-option label="管理者" value="2"></el-option>
             <el-option label="老师" value="3"></el-option>
@@ -27,7 +27,7 @@
         </el-form-item>
       </el-form>
     </el-card>
-    <!-- 下面卡片 --> 
+    <!-- 下面卡片 -->
     <el-card class="box-card">
       <!-- 表格 
         data:指定表格的数据源, 设置表格显示那些数据
@@ -43,12 +43,12 @@
         <el-table-column prop="role" label="角色"></el-table-column>
         <el-table-column prop="remark" label="备注"></el-table-column>
         <el-table-column prop="status" label="状态">
-          <template slot-scope='scope'>
+          <template slot-scope="scope">
             <span v-if="scope.row.status == 1">启用</span>
             <span v-else style="color:red">禁用</span>
           </template>
         </el-table-column>
- 
+
         <el-table-column label="操作" v-if="['超级管理员','管理员'].includes($store.state.role)">
           <!-- 如果使用按钮，最好使用自定义列,可方便拿到这行的数据 -->
           <template slot-scope="scope">
@@ -61,7 +61,11 @@
               type="text"
               @click="changeStatus(scope.row)"
             >{{scope.row.status === 1 ? '禁用' : '启用'}}</el-button>
-            <el-button type="text" @click="doDel(scope.row)" v-if="['超级管理员','管理员'].includes($store.state.role)">删除</el-button>
+            <el-button
+              type="text"
+              @click="doDel(scope.row)"
+              v-if="['超级管理员','管理员'].includes($store.state.role)"
+            >删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -90,21 +94,21 @@
       ></el-pagination>
     </el-card>
     <!-- 使用组件  -->
-   <userDialog ref="userDialog"></userDialog>
+    <userDialog ref="userDialog"></userDialog>
   </div>
 </template>
 
 <script>
 // 导入学科模块的接口方法文件
-import { userList, userStatus,userDel } from "@/api/user.js";
+import { userList, userStatus, userDel } from "@/api/user.js";
 
-import userDialog from './comments/userDialog';
+import userDialog from "./comments/userDialog";
 
 export default {
-    name: "index",
-    // 注册组件
-    components:{
-      userDialog
+  name: "index",
+  // 注册组件
+  components: {
+    userDialog
   },
   data() {
     return {
@@ -116,22 +120,22 @@ export default {
       size: 5,
       // 数据总量
       total: 0,
-      // 判断是否是第一次 
+      // 判断是否是第一次
       // isFrist:true
       // 记录上一次dian的是哪一行
-      oldItem:null
-    }; 
+      oldItem: null
+    };
   },
   methods: {
     // 页容量改变触发
     // 参数是改变后的页容量(val)
     handleSizeChange(size) {
       // 把改变后的页容量赋值给this.size
-        this.size = size;
-        // 只要页容量改变，都应该从第一页重新显示
-        this.page = 1;
-        // 根据新的页容量请求数据
-        this.getList();
+      this.size = size;
+      // 只要页容量改变，都应该从第一页重新显示
+      this.page = 1;
+      // 根据新的页容量请求数据
+      this.getList();
     },
     // 当前页码改变就触发
     // 参数是改变后的页码(val)
@@ -146,9 +150,9 @@ export default {
       // 调用获取学科列表的接口方法
       userList({
         // 页码
-        page:this.page,
+        page: this.page,
         // 页容量是多少，就查多少
-        limit:this.size,
+        limit: this.size,
         // rid:this.formInline.rid,
         // name:this.formInline.name,
         // username:this.formInline.username,
@@ -166,21 +170,23 @@ export default {
     changeStatus(item) {
       userStatus({
         id: item.id
-      }).then((res) => {
-        if(res.data.code == 200){
-          this.$message.success('状态修改成功');
-        }else{
+      }).then(res => {
+        if (res.data.code == 200) {
+          this.$message.success("状态修改成功");
+          // 调用获取学科列表的方法
+          this.getList();
+        } else {
           this.$message.error(res.data.message);
         }
       });
     },
     // 搜索按钮的点击事件
-    doSearch(){
+    doSearch() {
       this.page = 1;
       this.getList();
     },
     // 重置筛选点击事件
-    clearSearch(){
+    clearSearch() {
       // 表单对象的重置方法
       // 要想表单有重置方法,要给每一项加prop属性
       this.$refs.formInline.resetFields();
@@ -189,51 +195,51 @@ export default {
       this.getList();
     },
     // 编辑按钮点击事件
-     showEdit(item){
+    showEdit(item) {
       //  显示出编辑窗口
       this.$refs.userDialog.dialogFormVisible = true;
       // 把是否添加的状态改为false
-      this.$refs.userDialog.isAdd = false
-      if(item != this.oldItem){
+      this.$refs.userDialog.isAdd = false;
+      if (item != this.oldItem) {
         this.$refs.userDialog.form = { ...item };
-        // 并把记录上一行数据记录成当前行的数据 
+        // 并把记录上一行数据记录成当前行的数据
         this.oldItem = item;
       }
-     },
+    },
     //  删除点击事件
-    doDel(item){
-       userDel({
-         id:item.id
-       }).then(res => {
-        if(res.data.code == 200){
-          this.$message.success('删除成功');
+    doDel(item) {
+      userDel({
+        id: item.id
+      }).then(res => {
+        if (res.data.code == 200) {
+          this.$message.success("删除成功");
           // 如果是最后一页，那么刷新上一页
-          if(this.tableData.length == 1){
+          if (this.tableData.length == 1) {
             // 代表上一页
             this.page--;
           }
           // 如果是最后为 0
-          if(this.page == 0){
+          if (this.page == 0) {
             this.page = 1;
           }
           this.getList();
-        }else{
+        } else {
           this.$message.error(res.data.message);
         }
-       })
+      });
     },
     // 新增企业的点击事件
-    showAdd(){
-      this.$refs.userDialog.dialogFormVisible = true; 
+    showAdd() {
+      this.$refs.userDialog.dialogFormVisible = true;
       // 标记为新增状态
-      this.$refs.userDialog.isAdd = true; 
+      this.$refs.userDialog.isAdd = true;
       // 清空表单数据
-      this.$refs.userDialog.form = { }
+      this.$refs.userDialog.form = {};
     }
   },
   created() {
     // 调用获取学科列表的方法
-    this.getList(); 
+    this.getList();
   }
 };
 </script>
@@ -249,7 +255,7 @@ export default {
 .long {
   width: 149px;
 }
-.el-pagination{
+.el-pagination {
   text-align: center;
   margin-top: 30px;
 }
