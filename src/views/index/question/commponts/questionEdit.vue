@@ -1,14 +1,20 @@
 <template>
-  <el-dialog destroy-on-close class="my-add-dialog" fullscreen title="新增题库" :visible.sync="dialogFormVisible">
-    <el-form  :model="form" :rules="rules" ref="form">
+  <el-dialog
+    destroy-on-close
+    class="my-add-dialog"
+    fullscreen
+    title="编辑题库"
+    :visible.sync="dialogFormVisible"
+  >
+    <el-form :model="form" :rules="rules" ref="form">
       <el-form-item label="学科" :label-width="formLabelWidth" prop="subject">
         <subjectSelect v-model="form.subject"></subjectSelect>
       </el-form-item>
       <el-form-item label="阶段" :label-width="formLabelWidth" prop="step">
         <el-select v-model="form.step" placeholder="请选择阶段">
-          <el-option label="初级" value="1"></el-option>
-          <el-option label="中级" value="2"></el-option>
-          <el-option label="高级" value="3"></el-option>
+          <el-option label="初级" :value="1"></el-option>
+          <el-option label="中级" :value="2"></el-option>
+          <el-option label="高级" :value="3"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="企业" :label-width="formLabelWidth" prop="enterprise">
@@ -19,9 +25,9 @@
       </el-form-item>
       <el-form-item label="题型" :label-width="formLabelWidth" prop="type">
         <el-radio-group v-model="form.type">
-          <el-radio label="1">单选</el-radio>
-          <el-radio label="2">多选</el-radio>
-          <el-radio label="3">简答</el-radio>
+          <el-radio :label="1">单选</el-radio>
+          <el-radio :label="2">多选</el-radio>
+          <el-radio :label="3">简答</el-radio>
         </el-radio-group>
       </el-form-item>
       <el-form-item label="难度" :label-width="formLabelWidth" prop="difficulty">
@@ -91,7 +97,7 @@
       <el-form-item label="解析视频" :label-width="formLabelWidth" prop="video">
         <el-upload
           class="avatar-uploader"
-          :action="form.uploadUrl"
+          :action="uploadUrl"
           :show-file-list="false"
           :on-success="handleAvatarSuccess"
           :before-upload="beforeAvatarUpload"
@@ -128,7 +134,8 @@
 import ChinaAear from "./ChinaAear.vue";
 import myEditor from "./myEditor.vue";
 import opctionItem from "./opctionItem.vue";
-import { questionAdd } from "@/api/question.js";
+// 导入编辑的接口
+import { questionEdit } from "@/api/question.js";
 export default {
   name: "questionAdd",
   components: {
@@ -208,8 +215,6 @@ export default {
         multiple_select_answer: [],
         // 简答题绑定答案
         short_answer: "",
-        // 上传的接口地址
-        uploadUrl: process.env.VUE_APP_URL + "/question/upload ",
         // 跟选项绑定的数组
         select_options: [
           {
@@ -234,6 +239,8 @@ export default {
           }
         ]
       },
+      // 上传的接口地址
+      uploadUrl: process.env.VUE_APP_URL + "/question/upload ",
       // 预览视频
       videoUrl: "",
       dialogFormVisible: false,
@@ -243,7 +250,6 @@ export default {
   methods: {
     handleAvatarSuccess(res, file) {
       this.imageUrl = URL.createObjectURL(file.raw);
-      console.log(res.data.url);
       this.videoUrl = res.data.url;
     },
     beforeAvatarUpload(file) {
@@ -263,16 +269,16 @@ export default {
       // 整个表单验证，每一项必须加prop属性
       this.$refs.form.validate(v => {
         if (v) {
-          questionAdd(this.form).then(res => {
-            if(res.data.code == 200){
-              this.$message.success('新增题目完成');
-              // 关闭对话框 
+          questionEdit(this.form).then(res => {
+            if (res.data.code == 200) {
+              this.$message.success("编辑题目完成");
+              // 关闭对话框
               this.dialogFormVisible = false;
-              // 重置表单元素,自己封装的组件不会被清除
+              // 重置表单元素,自己封装的不会被清除
               this.$refs.form.restFields();
               // 刷新表格列表
               this.$parent.getList();
-            }else{
+            } else {
               this.$message.error(res.data.message);
             }
           });

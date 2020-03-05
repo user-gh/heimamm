@@ -30,7 +30,7 @@
           <el-select v-model="formInline.difficulty" placeholder="请选择难度">
             <el-option label="简单" :value="1"></el-option>
             <el-option label="一般" :value="2"></el-option>
-            <el-option label="困难" value="3"></el-option>
+            <el-option label="困难" :value="3"></el-option>
           </el-select>
         </el-form-item>
 
@@ -90,7 +90,7 @@
         <el-table-column prop="reads" label="访问量"></el-table-column>
         <el-table-column label="操作" width="135px">
           <template slot-scope="scope">
-            <el-button type="text">编辑</el-button>
+            <el-button type="text" @click="showEdit(scope.row)">编辑</el-button>
             <el-button
               type="text"
               @click="changeStatus(scope.row)"
@@ -115,6 +115,7 @@
       ></el-pagination>
     </el-card>
     <question-add ref="questionAdd" />
+    <question-edit ref="questionEdit" />
   </div>
 </template>
 
@@ -122,10 +123,12 @@
 import { questionList, questionStatus, questionDel } from "@/api/question";
 // 导入新增对话框
 import questionAdd from "./commponts/questionAdd.vue";
+import questionEdit from "./commponts/questionEdit.vue";
 export default {
   name: "question",
   components: {
-    questionAdd
+    questionAdd,
+    questionEdit
   },
   data() {
     return {
@@ -165,11 +168,21 @@ export default {
       this.getList();
     },
     // 新增试题点击事件
-    questionAdd(
-      
-    ) {
+    questionAdd() {
       // 打开新增试题对话框
       this.$refs.questionAdd.dialogFormVisible = true;
+    },
+    // 编辑按钮点击事件
+    showEdit(item){
+      // 赋值给编辑对话框里的form属性
+      this.$refs.questionEdit.form = {...item};
+      // 把城市city 从字符串转成数组
+      this.$refs.questionEdit.form.city =  this.$refs.questionEdit.form.city.split(',');
+      // 把多选multiple_select_answer从字符串转成数组
+      this.$refs.questionEdit.form.multiple_select_answer =  this.$refs.questionEdit.form.multiple_select_answer.split(',');
+      // 显示对话框
+      this.$refs.questionEdit.dialogFormVisible = true;
+
     },
     // 改变状态的点击事件
     changeStatus(item) {
