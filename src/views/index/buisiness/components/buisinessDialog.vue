@@ -35,7 +35,7 @@ export default {
       dialogFormVisible: false,
       formLabelWidth: "80px",
       //  跟表单绑定的对象
-        form: {
+      form: {
         eid: "",
         name: "",
         short_name: "",

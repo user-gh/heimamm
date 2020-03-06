@@ -1,6 +1,6 @@
 <template>
   <el-select v-model="subject" placeholder="请选择学科" @change="selChange">
-    <el-option v-if="isSearch" value=''>所有学科</el-option>
+    <el-option v-if="isSearch" value='所有学科'></el-option>
     <el-option v-for="(item, index) in subjectList" :key="index" :label="item.name" :value="item.id"></el-option>
   </el-select>
 </template>

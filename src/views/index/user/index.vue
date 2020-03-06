@@ -235,6 +235,7 @@ export default {
       this.$refs.userDialog.isAdd = true;
       // 清空表单数据
       this.$refs.userDialog.form = {};
+      this.oldItem = null;
     }
   },
   created() {

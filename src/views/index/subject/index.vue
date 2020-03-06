@@ -212,6 +212,7 @@ export default {
       //   this.isFrist = false;
       // }
       if(item != this.oldItem){
+        // console.log("进入")
         this.$refs.editDialog.form = { ...item };
         // 并把记录上一行数据记录成当前行的数据
         this.oldItem = item;
